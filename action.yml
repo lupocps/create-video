@@ -10,3 +10,8 @@ outputs:
 runs:
   using: 'docker'
   image: 'Dockerfile'
+  env:
+    GITHUB_ACTOR: ${{ github.actor }}
+    GITHUB_REPOSITORY: ${{ github.repository }}
+  envFiles:
+    - .env
