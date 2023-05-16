@@ -15,8 +15,8 @@ def main():
 
     my_input = os.environ["INPUT_MYINPUT"]
 
-    with open(os.environ['GITHUB_ENV'], 'a', encoding='utf-8') as file:
-        file.write(f"MY_OUTPUT={my_output}\n")
+    with open(os.environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as file:
+        print(f"myOutput={my_output}\n", file=file)
 
 
 if __name__ == "__main__":

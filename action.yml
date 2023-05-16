@@ -4,6 +4,7 @@ author: 'lupocps <help@lupo.ai>'
 inputs:
   myInput:
     description: "Input to use"
+    default: "world"
 outputs:
   myOutput:
     description: "Output from the action"
@@ -13,5 +14,3 @@ runs:
   env:
     GITHUB_ACTOR: ${{ github.actor }}
     GITHUB_REPOSITORY: ${{ github.repository }}
-  envFiles:
-    - .env
