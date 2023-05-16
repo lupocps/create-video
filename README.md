@@ -1,2 +1,2 @@
 # create-video
-Convert the markdown files into narrated videos
+Convert markdown files into narrated videos
