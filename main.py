@@ -4,6 +4,8 @@ from os import environ
 #import requests
 
 from src.lupo.user_verification import user_verification
+from src.lupo.compiler_lupo import validate_yaml_file_details
+
 from src.utils import read_toc
 
 
@@ -25,6 +27,7 @@ def main():
     user_details = user_verification(is_final, github_actor, github_repository)
     print(user_details)
 
+    validate_yaml_file_details("./",yaml_dict)
 
 
 
