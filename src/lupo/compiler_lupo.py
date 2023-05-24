@@ -1,11 +1,9 @@
+'''Lupo Compiler'''
+
 import unicodedata
 import json
-from src.utils import print_log
 from os.path import exists
-from os.path import join
-
-
-'''Lupo Compiler'''
+from src.utils import print_log
 
 
 def validate_yaml_file_details(root_folder:str, yaml_dict:str):
