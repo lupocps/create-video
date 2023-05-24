@@ -31,7 +31,9 @@ def main():
     validate_yaml_file_details(yaml_dict)
     my_output += f"\n{user_details}\n"
     print(my_output)
+    print(environ['GITHUB_OUTPUT'])
     with open(environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as file:
+        print("Enter")
         print(f"myOutput={my_output}\n", file=file)
 
 
