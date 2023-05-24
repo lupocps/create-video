@@ -29,12 +29,12 @@ def main():
     user_details = user_verification(is_final, github_actor, github_repository)
 
     validate_yaml_file_details(yaml_dict)
-    my_output += f"{user_details}\n"
+    my_output += "\n" + user_details + "\n"
     print(my_output)
     print(environ['GITHUB_OUTPUT'])
-    with open(environ["GITHUB_OUTPUT"], 'a', encoding='utf-8') as file:
+    with open(environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as file:
         print("Enter")
-        file.write(f"myOutput={my_output}")
+        file.write(f"myOutput={my_output}\n")
 
 
 
