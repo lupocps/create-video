@@ -32,7 +32,7 @@ def main():
     my_output += f"\n{user_details}\n"
     print(my_output)
     print(environ['GITHUB_OUTPUT'])
-    with open(environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as file:
+    with open(environ["GITHUB_OUTPUT"][1:], 'a', encoding='utf-8') as file:
         print("Enter")
         file.write(f"myOutput={my_output}\n")
 
