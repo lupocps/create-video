@@ -21,8 +21,8 @@ def main():
 
     is_final = ('final' in yaml_dict) and yaml_dict['final'] is True
 
-    user_verification(is_final, github_actor, github_repository)
-
+    user = user_verification(is_final, github_actor, github_repository)
+    print(user)
 
 if __name__ == "__main__":
     main()
