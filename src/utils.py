@@ -70,9 +70,8 @@ def read_toc(toc, github_repo):
             with open(toc, 'r', encoding="utf-8") as file:
                 try:
                     send_error_message(f"the first chapter 'name' key missing or there a problem with the indentation in the toc file: {error}", github_repo)
-
                 except FileNotFoundError:
-                    print_log(f"The file {toc} was not found.", "ERROR")
+                    send_error_message(f"The file {toc} was not found.", github_repo)
      
     return yaml_dict
 

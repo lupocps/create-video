@@ -20,9 +20,16 @@ def main():
         yaml_dict = read_toc(toc, github_repository)
 
     is_final = ('final' in yaml_dict) and yaml_dict['final'] is True
+    print(is_final)
 
-    user = user_verification(is_final, github_actor, github_repository)
-    print(user)
+    user_details = user_verification(is_final, github_actor, github_repository)
+    print(user_details)
+
+
+
+
+
+
 
 if __name__ == "__main__":
     main()
