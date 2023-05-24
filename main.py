@@ -22,10 +22,8 @@ def main():
         yaml_dict = read_toc(toc, github_repository)
 
     is_final = ('final' in yaml_dict) and yaml_dict['final'] is True
-    print(is_final)
 
     user_details = user_verification(is_final, github_actor, github_repository)
-    print(user_details)
 
     validate_yaml_file_details(yaml_dict)
 

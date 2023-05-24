@@ -21,7 +21,6 @@ def validate_yaml_file_details(yaml_dict:str):
     #root_folder = root_folder.replace("\\", "/")
 
     course_name = yaml_dict['name'] if 'name' in yaml_dict else '' 
-    print(course_name)
     course_version = yaml_dict['version'] if 'version' in yaml_dict else '' 
     course_speaker = yaml_dict['speaker'] if 'speaker' in yaml_dict else ''
     trailer_mode = yaml_dict['trailer'] if 'trailer' in yaml_dict else False
@@ -60,7 +59,7 @@ def validate_yaml_file_details(yaml_dict:str):
                 print("exist the theme file")
                 data = json.load(file)
                 if "markdown.marp.themes" in data:
-                    themes = " ".join([f"./{t}" for t in data["markdown.marp.themes"]])
+                    themes = " ".join([t for t in data["markdown.marp.themes"]])
                 else:
                     print_log("No 'markdown.marp.themes' attribute found in settings.json", "WARNING")
             except FileNotFoundError:
