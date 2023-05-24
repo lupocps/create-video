@@ -1,5 +1,6 @@
 '''Utils Functions and Variables'''
 
+import os
 import sys
 import yaml
 
@@ -42,8 +43,11 @@ def send_error_message(message, github_repo):
         message(str): Source message of the error
         github_repo(str): Repo of the user
     '''
-
-    with open('utils/message_error.txt', 'r', encoding='utf-8') as file:
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    print("current dir", current_dir)
+    file_path = os.path.join(current_dir, '../utils/message_error.txt')
+    print(file_path)
+    with open(file_path, 'r', encoding='utf-8') as file:
         error_message = file.read()
         error_message = error_message.replace('[REPO]', github_repo)
         error_message = error_message.replace('[MESSAGE]', message)
