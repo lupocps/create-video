@@ -46,7 +46,6 @@ def send_error_message(message, github_repo):
 
     current_dir = os.path.dirname(os.path.abspath(__file__))
     file_path = os.path.join(current_dir, '../utils/message_error.txt')
-    print(message)
     with open(file_path, 'r', encoding='utf-8') as file:
         error_message = file.read()
         error_message = error_message.replace('[REPO]', github_repo)
@@ -65,7 +64,6 @@ def read_toc(toc, github_repo):
     Returns:
         (dict): A dictionary of the toc file
     '''
-    print(toc)
     with open(toc, "r", encoding="utf-8") as file:
         try:
             yaml_dict = yaml.load(file.read(), Loader=yaml.SafeLoader)
