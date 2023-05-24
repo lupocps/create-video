@@ -2,11 +2,12 @@
 
 import unicodedata
 import json
+import re
 from os.path import exists
 from src.utils import print_log
 
 
-def validate_yaml_file_details(root_folder:str, yaml_dict:str):
+def validate_yaml_file_details(yaml_dict:str):
     '''Validate the details of the yaml file
     
     Parameters:
@@ -17,7 +18,7 @@ def validate_yaml_file_details(root_folder:str, yaml_dict:str):
         (Settings):
     
     '''
-    root_folder = root_folder.replace("\\", "/")
+    #root_folder = root_folder.replace("\\", "/")
 
     course_name = yaml_dict['name'] if 'name' in yaml_dict else '' 
     print(course_name)
@@ -52,14 +53,14 @@ def validate_yaml_file_details(root_folder:str, yaml_dict:str):
     
     # Check if file exists
     themes = "" #
-    print(f"{root_folder}/.vscode/settings.json") 
-    if exists(f"{root_folder}/.vscode/settings.json"):
-        with open(f"{root_folder}/.vscode/settings.json", encoding="utf-8") as file:
+    print("./.vscode/settings.json") 
+    if exists("./.vscode/settings.json"):
+        with open("./.vscode/settings.json", encoding="utf-8") as file:
             try:
                 print("exist the theme file")
                 data = json.load(file)
                 if "markdown.marp.themes" in data:
-                    themes = " ".join([f"{root_folder}/{t}" for t in data["markdown.marp.themes"]])
+                    themes = " ".join([f"./{t}" for t in data["markdown.marp.themes"]])
                 else:
                     print_log("No 'markdown.marp.themes' attribute found in settings.json", "WARNING")
             except FileNotFoundError:

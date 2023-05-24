@@ -27,7 +27,7 @@ def main():
     user_details = user_verification(is_final, github_actor, github_repository)
     print(user_details)
 
-    validate_yaml_file_details("./",yaml_dict)
+    validate_yaml_file_details(yaml_dict)
 
 
 
