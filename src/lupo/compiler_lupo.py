@@ -1,3 +1,4 @@
+import unicodedata
 from src.utils import print_log
 from os.path import exists
 from os.path import json
