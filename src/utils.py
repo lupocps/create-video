@@ -1,6 +1,7 @@
-
 '''Utils Functions and Variables'''
 
+import sys
+import yaml
 
 HEADERS_LUPO = {'Content-Type': 'application/json',
             'Accept': '*/*',
@@ -31,4 +32,47 @@ def print_log(message, level='INFO'):
 
     styled_message = f"{color}{message}{RESET}"
     print(styled_message)
+
+
+
+def send_error_message(message, github_repo):
+    '''Send error message to user
+    
+    Parameters:
+        message(str): Source message of the error
+        github_repo(str): Repo of the user
+    '''
+
+    with open('utils/message_error.txt', 'r', encoding='utf-8') as file:
+        error_message = file.read()
+        error_message = error_message.replace('[REPO]', github_repo)
+        error_message = error_message.replace('[MESSAGE]', message)
+    print(error_message)
+    sys.exit(1)
+    
+
+
+def read_toc(toc, github_repo):
+    '''Read the toc.yml file
+    
+    Parameters:
+        toc(str): The string of the toc file
+
+    Returns:
+        (dict): A dictionary of the toc file
+    '''
+    print(toc)
+    with open(toc, "r", encoding="utf-8") as file:
+        try:
+            yaml_dict = yaml.load(file.read(), Loader=yaml.SafeLoader)
+            print_log("YAML file loaded successfully.", "SUCCESS")
+        except yaml.YAMLError as error:
+            with open(toc, 'r', encoding="utf-8") as file:
+                try:
+                    send_error_message(f"the first chapter 'name' key missing or there a problem with the indentation in the toc file: {error}", github_repo)
+
+                except FileNotFoundError:
+                    print_log(f"The file {toc} was not found.", "ERROR")
+     
+    return yaml_dict
 

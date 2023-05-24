@@ -1,0 +1,10 @@
+Hi,
+
+An error occurred while executing the Lupo AI on [REPO].
+
+Please review the following message and correct the issue:
+
+- [ERROR_MESSAGE]
+
+Regards,
+The LUPO team.
