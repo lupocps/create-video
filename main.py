@@ -2,12 +2,17 @@
 
 import os
 #import requests
-from src.printer import print_info
+
+from src.lupo.user_verification import user_verification
+
+
 
 def main():
     ''' Main method '''
 
-    print_info()
+    toc = os.environ["INPUT_TOC"]
+
+    user_verification(toc)
 
 
 if __name__ == "__main__":
