@@ -11,6 +11,9 @@ from src.utils import read_toc
 
 def main():
     ''' Main method '''
+    
+    my_output = ""
+
 
     # read environment variables
     toc = environ["INPUT_TOC"]
@@ -26,7 +29,10 @@ def main():
     user_details = user_verification(is_final, github_actor, github_repository)
 
     validate_yaml_file_details(yaml_dict)
+    my_output += f"\n{user_details}\n"
 
+    with open(environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as file:
+        print(f"myOutput={my_output}\n", file=file)
 
 
 
