@@ -43,14 +43,14 @@ def send_error_message(message, github_repo):
         message(str): Source message of the error
         github_repo(str): Repo of the user
     '''
+
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    print("current dir", current_dir)
     file_path = os.path.join(current_dir, '../utils/message_error.txt')
-    print(file_path)
+    print(message)
     with open(file_path, 'r', encoding='utf-8') as file:
         error_message = file.read()
         error_message = error_message.replace('[REPO]', github_repo)
-        error_message = error_message.replace('[MESSAGE]', message)
+        error_message = error_message.replace('[ERROR_MESSAGE]', message)
     print(error_message)
     sys.exit(1)
     
