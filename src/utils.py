@@ -56,8 +56,8 @@ def log(message: str, level: str = logging.INFO):
     logging.basicConfig(
         filename='app.log',
         filemode='w',
-        level=logging.DEBUG,
-        format='%(asctime)s - %(levelname)s - %(message)s'
+        level=logging.INFO,
+        format='%(asctime)s - %(level)s - %(message)s'
     )
     if level.lower() == 'info':
         message = f"{CYAN}{message}{RESET}"
