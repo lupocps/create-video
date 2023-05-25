@@ -33,8 +33,7 @@ def main():
     print(environ['GITHUB_OUTPUT'])
     
     with open(environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as file:
-        print("Enter")
-        file.write(toc)
+        print(f"myOutput={my_output}\n", file=file)
 
 
 
