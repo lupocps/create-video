@@ -30,12 +30,15 @@ def main():
     validate_yaml_file_details(yaml_dict)
     my_output = output_builder.getvalue()
     
-    print(my_output)
+    lines = my_output.split("\n")
+    key_value_pairs = [line.split(":", 1) for line in lines if line.strip()]
 
+    # Create the formatted output string
+    formatted_output = "\n".join([f"{key.strip()}={value.strip()}" for key, value in key_value_pairs])
 
     
     with open(environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as file:
-        print(f"myOutput={my_output}\n", file=file)
+        print(f"myOutput={formatted_output}\n", file=file)
         
 
 
