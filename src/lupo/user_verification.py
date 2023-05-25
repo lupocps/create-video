@@ -6,7 +6,7 @@ from src.utils import ENDPOINT_USER
 from src.utils import HEADERS_LUPO
 from src.utils import print_log
 
-def user_verification(is_final, github_actor, github_repository) -> dict:
+def user_verification(is_final, github_actor, github_repository, output_string) -> dict:
     '''Verification a GitHub User in Lupo Web
     
     Parameters:
@@ -15,7 +15,7 @@ def user_verification(is_final, github_actor, github_repository) -> dict:
     
 
     print_log(f"Actor: {github_actor}, Repository: {github_repository}", "INFO")
-
+    output_string += f"Actor: {github_actor}, Repository: {github_repository}\n"
     github_repo = f"https://github.com/{github_repository}"
 
     if is_final:
