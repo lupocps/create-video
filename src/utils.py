@@ -44,20 +44,6 @@ LANGUAGE_TRANSLATION_DICT = {
     'dutch': 'nl'
 }
 
-logging.basicConfig(
-    filename='app.log',
-    filemode='w',
-    level=logging.DEBUG,
-    format='%(asctime)s - %(levelname)s - %(message)s'
-)
-
-# Define custom log formatter
-log_formatter = logging.Formatter('%(asctime)s - %(level)s - %(message)s')
-# Set up console logger with custom formatter
-console_handler = logging.StreamHandler()
-console_handler.setLevel(logging.DEBUG)
-console_handler.setFormatter(log_formatter)
-logging.getLogger().addHandler(console_handler)
 
 
 def log(message: str, level: str = logging.INFO):
@@ -67,29 +53,33 @@ def log(message: str, level: str = logging.INFO):
         message (str): The message to log.
         level (int): The logging level to use. Default is logging.INFO.
     '''
-    logger = logging.getLogger()
-
+    logging.basicConfig(
+        filename='app.log',
+        filemode='w',
+        level=logging.INFO,
+        format='%(message)s'
+    )
     if level.lower() == 'info':
-        message = f"{CYAN}{message}{RESET}"
-        logger.info(message)
+        message = f"{CYAN}INFO - {message}{RESET}"
+        logging.info(message)
     elif level.lower() == 'success':
-        message = f"{GREEN}{message}{RESET}"
-        logger.info(message)
+        message = f"{GREEN}SUCCESS - {message}{RESET}"
+        logging.info(message)
     elif level.lower() == 'warning':
-        message = f"{YELLOW}{message}{RESET}"
-        logger.warning(message)
+        message = f"{YELLOW}WARNING - {message}{RESET}"
+        logging.warning(message)
     elif level.lower() == 'error':
-        message = f"{RED}{message}{RESET}"
-        logger.error(message)
+        message = f"{RED}ERROR - {message}{RESET}"
+        logging.error(message)
         github_repo = os.environ["GITHUB_REPOSITORY"]
         send_error_message(message, github_repo)
     elif level.lower() == 'critical':
-        message = f"{RED}{message}{RESET}"
-        logger.critical(message)
+        message = f"{RED}CRITICAL - {message}{RESET}"
+        logging.critical(message)
         github_repo = os.environ["GITHUB_REPOSITORY"]
         send_error_message(message, github_repo)
     else:
-        logger.debug(message)
+        logging.debug(message)
 
 
 def send_error_message(message, github_repo):
