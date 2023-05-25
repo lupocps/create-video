@@ -30,7 +30,7 @@ def main():
     validate_yaml_file_details(yaml_dict)
     my_output = output_builder.getvalue()
     
-    print("output", my_output)
+    print(my_output)
 
 
     
