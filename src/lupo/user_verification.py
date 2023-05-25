@@ -16,6 +16,7 @@ def user_verification(is_final, github_actor, github_repository, output_string) 
 
     print_log(f"Actor: {github_actor}, Repository: {github_repository}", "INFO")
     output_string += f"Actor: {github_actor}, Repository: {github_repository}\n"
+    print("output_string in user verification: ", output_string)
     github_repo = f"https://github.com/{github_repository}"
 
     if is_final:
