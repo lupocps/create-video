@@ -29,7 +29,7 @@ def print_log(message, output_builder, level='INFO'):
         'ERROR': RED,
         'SUCCESS': GREEN,
         'INFO': CYAN
-    }.get(level.upper(), '')
+    }
 
     styled_message = f"{color}{message}{RESET}\n"
     output_builder.write(styled_message)
