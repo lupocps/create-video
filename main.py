@@ -33,11 +33,10 @@ def main():
     print(my_output)
 
 
-    
+    toc_output = f"toc {toc}"
     with open(environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as file:
-        print(f"{my_output}\n", file=file)
+        print(f"{toc_output}\n", file=file)
         
-
 
 
 
