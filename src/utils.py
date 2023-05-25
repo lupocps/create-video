@@ -55,7 +55,7 @@ def send_error_message(message, github_repo):
     
 
 
-def read_toc(toc, github_repo, output_string):
+def read_toc(toc, github_repo, output_builder):
     '''Read the toc.yml file
     
     Parameters:
@@ -68,8 +68,8 @@ def read_toc(toc, github_repo, output_string):
         try:
             yaml_dict = yaml.load(file.read(), Loader=yaml.SafeLoader)
             print_log("YAML file loaded successfully.", "SUCCESS")
-            output_string += "YAML file loaded successfully.\n"
-            print("output_string in read_toc: ", output_string)
+            output_builder.write("YAML file loaded successfully.")
+            print("output_string in read_toc: ", output_builder)
         except yaml.YAMLError as error:
             with open(toc, 'r', encoding="utf-8") as file:
                 try:
