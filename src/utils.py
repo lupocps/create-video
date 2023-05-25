@@ -68,7 +68,7 @@ def read_toc(toc, github_repo, output_builder):
         try:
             yaml_dict = yaml.load(file.read(), Loader=yaml.SafeLoader)
             print_log("YAML file loaded successfully.", "SUCCESS")
-            output_builder.write("YAML file loaded successfully.")
+            output_builder.write("YAML file loaded successfully.\n")
             print("output_string in read_toc: ", output_builder)
         except yaml.YAMLError as error:
             with open(toc, 'r', encoding="utf-8") as file:

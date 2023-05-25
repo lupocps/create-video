@@ -15,7 +15,7 @@ def user_verification(is_final, github_actor, github_repository, output_builder)
     
 
     print_log(f"Actor: {github_actor}, Repository: {github_repository}", "INFO")
-    output_builder.write(f"Actor: {github_actor}, Repository: {github_repository}")
+    output_builder.write(f"Actor: {github_actor}, Repository: {github_repository}\n")
     print("output_string in user verification: ", output_builder)
     github_repo = f"https://github.com/{github_repository}"
 

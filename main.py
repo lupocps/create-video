@@ -28,7 +28,7 @@ def main():
     user_details = user_verification(is_final, github_actor, github_repository, output_builder)
     print("output_string after user_verification: ", output_builder)
     validate_yaml_file_details(yaml_dict)
-    my_output = f"output {output_builder}"
+    my_output = output_builder.getvalue()
     
     print("output", my_output)
 
