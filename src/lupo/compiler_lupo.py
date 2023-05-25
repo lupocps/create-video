@@ -137,4 +137,5 @@ def validate_languages(languages_to_translate:list) -> list:
 
         languages_to_translate = languages_to_translate_temp
         log("Validate all languages finished", "success")
+        print(languages_to_translate)
         return languages_to_translate
