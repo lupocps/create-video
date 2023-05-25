@@ -20,7 +20,7 @@ CYAN = '\033[96m'
 RESET = '\033[0m'
 
 
-def print_log(message, level='INFO'):
+def print_log(message, output_builder, level='INFO'):
     '''Print in the console info of Lupo
     '''
     color = {
@@ -31,9 +31,9 @@ def print_log(message, level='INFO'):
         'INFO': CYAN
     }.get(level.upper(), '')
 
-    styled_message = f"{color}{message}{RESET}"
+    styled_message = f"{color}{message}{RESET}\n"
+    output_builder.write(styled_message)
     print(styled_message)
-
 
 
 def send_error_message(message, github_repo):
@@ -67,9 +67,9 @@ def read_toc(toc, github_repo, output_builder):
     with open(toc, "r", encoding="utf-8") as file:
         try:
             yaml_dict = yaml.load(file.read(), Loader=yaml.SafeLoader)
-            print_log("YAML file loaded successfully.", "SUCCESS")
-            output_builder.write("YAML file loaded successfully.\n")
-            print("output_string in read_toc: ", output_builder)
+            print_log("YAML file loaded successfully.", "SUCCESS", output_builder)
+
+
         except yaml.YAMLError as error:
             with open(toc, 'r', encoding="utf-8") as file:
                 try:

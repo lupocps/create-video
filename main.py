@@ -22,20 +22,31 @@ def main():
     if toc:
         yaml_dict = read_toc(toc, github_repository, output_builder)
 
-    print("output_string after read toc: ", output_builder)
     is_final = ('final' in yaml_dict) and yaml_dict['final'] is True
 
     user_details = user_verification(is_final, github_actor, github_repository, output_builder)
-    print("output_string after user_verification: ", output_builder)
+
+
     validate_yaml_file_details(yaml_dict)
     my_output = output_builder.getvalue()
     
     print(my_output)
 
 
+
+
+
+
+
+
+
+
+
+
+
     toc_output = f"toc {toc}"
     with open(environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as file:
-        print(f"myOutput={my_output}\n", file=file)
+        print(f"myOutput={toc_output}\n", file=file)
         
 
 

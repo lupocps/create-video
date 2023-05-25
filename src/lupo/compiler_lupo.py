@@ -25,7 +25,7 @@ def validate_yaml_file_details(yaml_dict:str):
     course_speaker = yaml_dict['speaker'] if 'speaker' in yaml_dict else ''
     trailer_mode = yaml_dict['trailer'] if 'trailer' in yaml_dict else False
 
-
+    #TODO:
     speakers = course_speaker.split(",")
     if len(speakers) > 1:
         speakers = [speaker.strip() for speaker in speakers]
@@ -52,7 +52,7 @@ def validate_yaml_file_details(yaml_dict:str):
     
     # Check if file exists
     themes = "" #
-    print("./.vscode/settings.json") 
+ 
     if exists("./.vscode/settings.json"):
         with open("./.vscode/settings.json", encoding="utf-8") as file:
             try:
@@ -67,7 +67,8 @@ def validate_yaml_file_details(yaml_dict:str):
                 print_log("The file was not found.", "ERROR")
     else:       
         print_log("The '.vscode/settings.json' file does not exist. Unable to generate themes.", "WARNING")
-    print("themes:", themes)
+
+
     # Validate attributes
     course_name = slugify(course_name)
     course_version = slugify(course_version)
