@@ -4,8 +4,8 @@ import unicodedata
 import json
 import re
 from os.path import exists
-from src.utils import print_log
-
+from src.utils import log
+from src.utils import LANGUAGE_TRANSLATION_DICT
 
 def validate_yaml_file_details(yaml_dict:str):
     '''Validate the details of the yaml file
@@ -36,11 +36,11 @@ def validate_yaml_file_details(yaml_dict:str):
 
     # CHECK DETAILS
     if course_name == '':
-        print_log("The yaml file has no 'name' key.", 'warning')
+        log("The yaml file has no 'name' key.", 'warning')
     if course_version == '':
-        print_log("The yaml file has no 'version' key.", 'warning')
+        log("The yaml file has no 'version' key.", 'warning')
     if course_speaker == '':
-        print_log("The yaml file has no 'speaker' key.", 'warning')
+        log("The yaml file has no 'speaker' key.", 'warning')
         course_speaker = 'Aria'
 
 
@@ -56,24 +56,24 @@ def validate_yaml_file_details(yaml_dict:str):
     if exists("./.vscode/settings.json"):
         with open("./.vscode/settings.json", encoding="utf-8") as file:
             try:
-                print("exist the theme file")
                 data = json.load(file)
                 if "markdown.marp.themes" in data:
                     themes = " ".join([t for t in data["markdown.marp.themes"]])
                 else:
-                    print_log("No 'markdown.marp.themes' attribute found in settings.json", "WARNING")
+                    log("No 'markdown.marp.themes' attribute found in settings.json", 'warning')
             except FileNotFoundError:
                 print("No exist file")
-                print_log("The file was not found.", "ERROR")
+                log("The file was not found.", 'error')
     else:       
-        print_log("The '.vscode/settings.json' file does not exist. Unable to generate themes.", "WARNING")
+        log("The '.vscode/settings.json' file does not exist. Unable to generate themes.", 'warning')
 
 
     # Validate attributes
+    # SPEAKER AFTER CHECK MD FILE
     course_name = slugify(course_name)
     course_version = slugify(course_version)
 
-    #languages_to_translate = validate_languages(languages_to_translate)
+    languages_to_translate = validate_languages(languages_to_translate)
 
     course_speaker = course_speaker.capitalize()
    # if not has_style_in_lupo(style_speaker, course_speaker):
@@ -109,3 +109,32 @@ def slugify(value: str, allow_unicode=False) -> str:
             'ascii', 'ignore').decode('ascii')
     value = re.sub(r'[^\w\s-]', '', value.lower())
     return re.sub(r'[-\s]+', '_', value).strip('-_')
+
+
+def validate_languages(languages_to_translate:list) -> list:
+    '''Validate the languages of translate
+
+    Parameters:
+        languages_to_translate(list):
+
+    Return:
+        (list):
+    '''
+    if languages_to_translate != '':
+        languages_to_translate_temp = []
+        for language in languages_to_translate.split(","):
+            language = language.strip().lower()
+            if language in LANGUAGE_TRANSLATION_DICT:
+                languages_to_translate_temp.append(LANGUAGE_TRANSLATION_DICT[language])
+                language = LANGUAGE_TRANSLATION_DICT[language]
+            elif language == 'zh-hans':
+                languages_to_translate_temp.append('zh-Hans')
+                language = 'zh-Hans' 
+            elif language in LANGUAGE_TRANSLATION_DICT.values():
+                languages_to_translate_temp.append(language)
+            else:
+                log(f"The {language} language for translation does not exist.", "warning")
+
+        languages_to_translate = languages_to_translate_temp
+        log("Validate all languages finished", "success")
+        return languages_to_translate

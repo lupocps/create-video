@@ -11,38 +11,41 @@ from src.utils import read_toc
 
 def main():
     ''' Main method '''
-    output_builder = StringIO()
 
-    # read environment variables
     toc = environ["INPUT_TOC"]
-    github_actor = environ["GITHUB_ACTOR"]
-    github_repository = environ["GITHUB_REPOSITORY"]
+    
 
     # read toc
     if toc:
-        yaml_dict = read_toc(toc, github_repository, output_builder)
+        yaml_dict = read_toc(toc)
 
     is_final = ('final' in yaml_dict) and yaml_dict['final'] is True
 
-    user_details = user_verification(is_final, github_actor, github_repository, output_builder)
+    user_details = user_verification(is_final)
 
 
     validate_yaml_file_details(yaml_dict)
-    my_output = output_builder.getvalue()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    with open("./app.log", "r", encoding='utf-8') as file:
+        my_output = file.read()
     
     print(my_output)
-
-
-
-
-
-
-
-
-
-
-
-
 
     toc_output = f"toc {toc}"
     with open(environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as file:

@@ -1,21 +1,22 @@
 '''GitHub verification'''
 
-import sys
+from os import environ
 import requests
 from src.utils import ENDPOINT_USER
 from src.utils import HEADERS_LUPO
-from src.utils import print_log
-from src.utils import send_error_message
+from src.utils import log
 
-def user_verification(is_final, github_actor, github_repository, output_builder) -> dict:
+
+def user_verification(is_final) -> dict:
     '''Verification a GitHub User in Lupo Web
     
     Parameters:
         
     '''
-    
+    github_actor = environ["GITHUB_ACTOR"]
+    github_repository = environ["GITHUB_REPOSITORY"]
 
-    print_log(f"Actor: {github_actor}, Repository: {github_repository}", output_builder, "INFO")
+    log(f"Actor: {github_actor}, Repository: {github_repository}", "info")
     github_repo = f"https://github.com/{github_repository}"
 
     if is_final:
@@ -41,6 +42,6 @@ def user_verification(is_final, github_actor, github_repository, output_builder)
         return params_for_db
 
     message_error = f'{github_actor} user validation did not complete successfully'
-    print_log(message_error, output_builder, "ERROR")
-    send_error_message(message_error, github_repo)
+    log(message_error, "error")
+  #  send_error_message(message_error, github_repo)
     
