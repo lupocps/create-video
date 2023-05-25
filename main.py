@@ -38,7 +38,7 @@ def main():
     print(formatted_output)
     
     with open(environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as file:
-        file.write(f"myOutput={formatted_output}\n")
+        file.write(f"myOutput={formatted_output}\n\n")
         
 
 
