@@ -44,6 +44,20 @@ LANGUAGE_TRANSLATION_DICT = {
     'dutch': 'nl'
 }
 
+logging.basicConfig(
+    filename='app.log',
+    filemode='w',
+    level=logging.DEBUG,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
+
+# Define custom log formatter
+log_formatter = logging.Formatter('%(asctime)s - %(level)s - %(message)s')
+# Set up console logger with custom formatter
+console_handler = logging.StreamHandler()
+console_handler.setLevel(logging.DEBUG)
+console_handler.setFormatter(log_formatter)
+logging.getLogger().addHandler(console_handler)
 
 
 def log(message: str, level: str = logging.INFO):
@@ -53,33 +67,29 @@ def log(message: str, level: str = logging.INFO):
         message (str): The message to log.
         level (int): The logging level to use. Default is logging.INFO.
     '''
-    logging.basicConfig(
-        filename='app.log',
-        filemode='w',
-        level=logging.INFO,
-        format='%(asctime)s - %(level)s - %(message)s'
-    )
+    logger = logging.getLogger()
+
     if level.lower() == 'info':
         message = f"{CYAN}{message}{RESET}"
-        logging.info(message)
+        logger.info(message)
     elif level.lower() == 'success':
         message = f"{GREEN}{message}{RESET}"
-        logging.info(message)
+        logger.info(message)
     elif level.lower() == 'warning':
         message = f"{YELLOW}{message}{RESET}"
-        logging.warning(message)
+        logger.warning(message)
     elif level.lower() == 'error':
         message = f"{RED}{message}{RESET}"
-        logging.error(message)
+        logger.error(message)
         github_repo = os.environ["GITHUB_REPOSITORY"]
         send_error_message(message, github_repo)
     elif level.lower() == 'critical':
         message = f"{RED}{message}{RESET}"
-        logging.critical(message)
+        logger.critical(message)
         github_repo = os.environ["GITHUB_REPOSITORY"]
         send_error_message(message, github_repo)
     else:
-        logging.debug(message)
+        logger.debug(message)
 
 
 def send_error_message(message, github_repo):
