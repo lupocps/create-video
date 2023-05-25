@@ -35,7 +35,7 @@ def main():
 
     
     with open(environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as file:
-        print(f"myOutput={my_output}\n", file=file)
+        print(f"$myOutput=${my_output}\n", file=file)
         
 
 
