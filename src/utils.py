@@ -29,7 +29,7 @@ def print_log(message, output_builder, level='INFO'):
         'ERROR': RED,
         'SUCCESS': GREEN,
         'INFO': CYAN
-    }
+    }.get(level.upper(), '')
 
     styled_message = f"{color}{message}{RESET}\n"
     output_builder.write(styled_message)
@@ -67,7 +67,7 @@ def read_toc(toc, github_repo, output_builder):
     with open(toc, "r", encoding="utf-8") as file:
         try:
             yaml_dict = yaml.load(file.read(), Loader=yaml.SafeLoader)
-            print_log("YAML file loaded successfully.", "SUCCESS", output_builder)
+            print_log("YAML file loaded successfully.", output_builder, "SUCCESS")
 
 
         except yaml.YAMLError as error:
