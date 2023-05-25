@@ -35,7 +35,7 @@ def main():
 
     # Create the formatted output string with key-value pairs
     formatted_output = "\n".join([f"event_{index}={line}" for index, line in enumerate(lines)])
-
+    print(formatted_output)
     
     with open(environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as file:
         print(f"myOutput={formatted_output}\n", file=file)
