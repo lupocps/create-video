@@ -8,7 +8,7 @@ from src.lupo.compiler_lupo import validate_yaml_file_details
 
 from src.utils import read_toc
 from src.utils import log
-from src.entities.course import Course
+
 
 def main():
     ''' Main method '''

@@ -2,7 +2,7 @@
 '''
 
 from datetime import datetime
-from measure_timing import MeasureTiming
+from src.entities.measure_timing import MeasureTiming
 
 
 class Settings:
