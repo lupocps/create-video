@@ -30,12 +30,6 @@ def main():
     settings = validate_yaml_file_details(yaml_dict)
 
     print("settings", settings)
-    # STRUCTURE AND FILL ENTITIES
-
-    log('[1/2] Validation. Starting slides validation.', 'info')
-   # course = Course(settings)
-   # print("course", course)
-    log('Validation complete.', 'info')
 
 
 
