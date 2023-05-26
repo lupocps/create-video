@@ -33,8 +33,8 @@ def main():
     # STRUCTURE AND FILL ENTITIES
 
     log('[1/2] Validation. Starting slides validation.', 'info')
-    course = Course(settings)
-    print("course", course)
+   # course = Course(settings)
+   # print("course", course)
     log('Validation complete.', 'info')
 
 
