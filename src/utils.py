@@ -4,7 +4,7 @@ import os
 import sys
 import logging
 import yaml
-from azure.storage.blob import BlobServiceClient
+
 
 HEADERS_LUPO = {'Content-Type': 'application/json',
             'Accept': '*/*',
@@ -147,42 +147,4 @@ def read_toc(toc):
      
     return yaml_dict
 
-
-
-def upload_file_to_azure_blob_storage(
-        container_name,
-        file_path,
-        expiry=7,
-        blob_name=None):
-    '''Upload a file to Azure Blob Storage and return the URL of the uploaded file.
-
-    Parameters:
-        connection_string (str): The connection string to the Azure Blob Storage account.
-        container_name (str): The name of the container to upload the file to.
-        file_path (str): The local path of the file to upload.
-        blob_name (str): The name to give the blob.
-
-    Returns:
-        str: The URL of the uploaded file.
-    '''
-    connection_string = os.environ["LUPO_CORE_AZURE_STORAGE_CONNECTION_STRING"]
-    blob_service_client = BlobServiceClient.from_connection_string(
-        connection_string)
-    container_client = blob_service_client.get_container_client(container_name)
-
-    # Use the local file name as the blob name if it's not provided
-    if blob_name is None:
-        blob_name = os.path.basename(file_path)
-
-    # Upload the file to Azure Blob Storage
-    with open(file_path, 'rb') as data:
-        blob_client = container_client.upload_blob(
-            name=blob_name, data=data, overwrite=True)
-
-    # Set the blob to be deleted in 7 days
-    # blob_properties = blob_client.get_blob_properties()
-    blob_client.set_blob_metadata(metadata={'delete_after_days': f'{expiry}'})
-
-    # Return the URL of the uploaded file
-    return blob_client.url
 
