@@ -22,7 +22,7 @@ def main():
 
     is_final = ('final' in yaml_dict) and yaml_dict['final'] is True
 
-    user_details = user_verification(is_final)
+   # user_details = user_verification(is_final)
 
 
     #COMPILER
