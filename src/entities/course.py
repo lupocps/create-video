@@ -1,6 +1,6 @@
 '''Module with all the chapters of the course
 '''
-#import os
+
 
 from settings import Settings
 from chapter import Chapter
@@ -49,11 +49,3 @@ class Course:
             log("The 'chapters' key is not found", "error")
         print("chapters", self.chapters)
 
-    # def get_logs(self) -> str:
-    #     '''Get the log file.
-
-    #         Return:
-    #             str: The path where the log file are located
-    #     '''
-    #     logs = os.path.abspath("./app.log").replace("\\", "/")
-    #     return logs

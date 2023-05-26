@@ -1,15 +1,9 @@
 '''Module with the content of all the pages of the section.
 '''
-import re
+
 from os.path import dirname
 from os.path import exists
-#from os.path import normpath
-#from os.path import join
-#from os.path import basename
 from src.utils import log
-#from coursecreator.utils import MARP_DIRECTIVES
-#from coursecreator.video import concatenate_video_and_audio_notes
-#from coursecreator.video import concatenate_videos_files
 from src.lupo.compiler_lupo import fix_relative_paths
 
 from settings import Settings
@@ -55,50 +49,7 @@ class Section:
             markdown_text = fix_relative_paths(markdown_text, markdown_absolute_path, settings.course_name)
         
         
-        
-        
-        # Split marp markdown in Slides using '---'
-       # markdown_slides = [slide for slide in re.split(r"\-\-\-\s?\n", markdown_text) if slide.strip() != '']
-       # page_id = 1
-       # for page in markdown_slides[1:]:
-        #    result = re.search(r"((.|\n)*)<!--\s*((.|\n)*)\s*-->", page)
-        #    markdown_text = result.group(1)
-        #    audio_note = result.group(3)
-       #    page = Page(id=page_id, marp_header=f"---\n{markdown_slides[0]}\n---\n", markdown_text=markdown_text,
-        #                audio_notes=audio_note, settings=settings)
-
-        #    page.source_md = markdown_absolute_path
-
-         #   self.pages.append(page)
-        #    page_id += 1
-
-
-    # def generate_video(self) -> str:
-    #     '''Generate a video with the content of all the pages of the section.
-
-    #         Return:
-    #             str: Path of the video generated
-    #     '''
-
-    #     for page in self.pages:
-    #         page.generate_path()
-    #         audio_notes = page.generate_audio_notes(self.settings.tts_components)
-    #         video_only_file = page.generate_video()
-    #         video = concatenate_video_and_audio_notes(
-    #             video_only_file,
-    #             audio_notes,
-    #             f"{page.get_output_path()}/{page.id}",
-    #             draft= not self.settings.final, #to change to draft
-    #             is_console_application = True
-    #         )
-    #         self.videos.append(video)
-
-    #     concatenate_video, time = concatenate_videos_files(self.videos, output_path=self.output_directory)
-    #     self.settings.measure_timing.add_time(time)
-    #     self.settings.measure_timing.add_video_amount()
-
-    #     return concatenate_video
-
+    
 
     
 
