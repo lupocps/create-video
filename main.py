@@ -24,6 +24,7 @@ def main():
     user_details = user_verification(is_final)
 
 
+    #COMPILER
     validate_yaml_file_details(yaml_dict)
 
 

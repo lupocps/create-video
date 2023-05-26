@@ -161,7 +161,7 @@ def has_style_in_lupo(style: str, voice_speaker: str) -> bool:
     print("response:", response)
     if response.status_code == 200:
         voices_speaker = response.json()
-        print(voices_speaker)
+        print("voice_speaker",voices_speaker)
     else:
         log("Problem with connecting to the API ", "warning")
     if not voice_speaker in voices_speaker:
