@@ -43,5 +43,5 @@ def user_verification(is_final) -> dict:
 
     message_error = f'{github_actor} user validation did not complete successfully'
     log(message_error, "error")
-  #  send_error_message(message_error, github_repo)
+
     

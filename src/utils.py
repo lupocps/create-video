@@ -2,8 +2,9 @@
 
 import os
 import sys
-import yaml
 import logging
+import yaml
+
 
 HEADERS_LUPO = {'Content-Type': 'application/json',
             'Accept': '*/*',
@@ -11,6 +12,10 @@ HEADERS_LUPO = {'Content-Type': 'application/json',
 
 
 ENDPOINT_USER = "https://lupo.ai/api/ProjectRuns"
+
+
+#ENDPOINT SERVER LUPO, TEMPORAL
+ENDPOINT_LUPO = "https://20.55.24.28:50000/api"
 
 
 RED = '\033[91m'
@@ -115,15 +120,13 @@ def read_toc(toc):
             yaml_dict = yaml.load(file.read(), Loader=yaml.SafeLoader)
             log("YAML file loaded successfully.", "success")
 
-
         except yaml.YAMLError as error:
             with open(toc, 'r', encoding="utf-8") as file:
                 try:
                     log(f"the first chapter 'name' key missing or there a problem with the indentation in the toc file: {error}", "error")
-                  #  send_error_message(f"the first chapter 'name' key missing or there a problem with the indentation in the toc file: {error}", github_repo)
                 except FileNotFoundError:
                     log(f"The file {toc} was not found.", "error")
-                  #  send_error_message(f"The file {toc} was not found.", github_repo)
+
      
     return yaml_dict
 

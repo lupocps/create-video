@@ -4,8 +4,12 @@ import unicodedata
 import json
 import re
 from os.path import exists
+import requests
 from src.utils import log
 from src.utils import LANGUAGE_TRANSLATION_DICT
+from src.utils import ENDPOINT_LUPO
+from src.utils import HEADERS_LUPO
+
 
 def validate_yaml_file_details(yaml_dict:str):
     '''Validate the details of the yaml file
@@ -62,7 +66,6 @@ def validate_yaml_file_details(yaml_dict:str):
                 else:
                     log("No 'markdown.marp.themes' attribute found in settings.json", 'warning')
             except FileNotFoundError:
-                print("No exist file")
                 log("The file was not found.", 'error')
     else:       
         log("The '.vscode/settings.json' file does not exist. Unable to generate themes.", 'warning')
@@ -76,8 +79,8 @@ def validate_yaml_file_details(yaml_dict:str):
     languages_to_translate = validate_languages(languages_to_translate)
 
     course_speaker = course_speaker.capitalize()
-   # if not has_style_in_lupo(style_speaker, course_speaker):
-   #     style_speaker = "default"
+    if not has_style_in_lupo(style_speaker, course_speaker):
+        style_speaker = "default"
 
 
     #tts_components = TTSComponents(
@@ -85,7 +88,6 @@ def validate_yaml_file_details(yaml_dict:str):
 
 
     #return Settings(root_folder, yaml_dict, course_name, course_version, tts_components,languages_to_translate,mail,themes, trailer_mode)
-
 
 
 def slugify(value: str, allow_unicode=False) -> str:
@@ -137,5 +139,60 @@ def validate_languages(languages_to_translate:list) -> list:
 
         languages_to_translate = languages_to_translate_temp
         log("Validate all languages finished", "success")
-        print(languages_to_translate)
         return languages_to_translate
+
+    return ""
+
+
+def has_style_in_lupo(style: str, voice_speaker: str) -> bool:
+    '''Check if a specific style is available for a given voice speaker.
+
+    Args:
+        style (str): The name of the style to check.
+        voice_speaker (str): The name of the voice speaker to check.
+
+    Returns:
+        bool: True if the style is available for the given voice speaker, False otherwise.
+    '''
+    if style == "default": # For speakers without styling
+        return False
+    
+    response = requests.get(ENDPOINT_LUPO+"/styles", HEADERS_LUPO, timeout=20)
+    print("response:", response)
+    if response.status_code == 200:
+        voices_speaker = response.json()
+        print(voices_speaker)
+    else:
+        log("Problem with connecting to the API ", "warning")
+    if not voice_speaker in voices_speaker:
+        log(f"The voice speaker {voice_speaker} has no styles", "warning")
+        return False
+    if not style.lower() in voices_speaker[voice_speaker]:
+        log(f"The voice speaker does not have the {style} style", "warning")
+        return False
+    return True
+
+
+
+# Need a list (example) with the available speakers for not to put non-existent speakers
+def rectify_voice_speaker(voice_speaker: str) -> str:
+    '''Add the speaker name in the correct format for Azure.
+
+        Parameters:
+            voice_speaker (str): Voice speaker of the course
+
+        Return:
+            str: Voice speaker with the correct format
+    '''
+    response = requests.get(ENDPOINT_LUPO+"/speakers", HEADERS_LUPO, timeout=20)
+    if response.status_code == 200:
+        speakers_lupo = response.json()
+    else:
+        log("Problem with connecting to the API ", "warning")
+    for language, speakers in speakers_lupo.items():
+        if voice_speaker in speakers:
+            return f"{language}-{voice_speaker}Neural"
+
+    log('The voice speaker does not exist', 'warning')
+    # TODO: default speaker for each language
+    return "en-US-AriaNeural"
