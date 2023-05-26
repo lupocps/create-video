@@ -8,7 +8,7 @@ from src.lupo.compiler_lupo import validate_yaml_file_details
 
 from src.utils import read_toc
 from src.utils import log
-
+from src.entities.course import Course
 
 def main():
     ''' Main method '''
@@ -22,7 +22,7 @@ def main():
 
     is_final = ('final' in yaml_dict) and yaml_dict['final'] is True
 
-   user_details = user_verification(is_final)
+    user_details = user_verification(is_final)
 
 
     #COMPILER
@@ -31,7 +31,10 @@ def main():
 
     print("settings", settings)
 
-
+    # Create course objects
+    log('[1/2] Validation. Starting slides validation.', 'info')
+    course = Course(settings)
+    log('Validation complete.', 'info')
 
 
 
