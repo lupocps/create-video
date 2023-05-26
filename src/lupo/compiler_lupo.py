@@ -4,12 +4,19 @@ import unicodedata
 import json
 import re
 from os.path import exists
+from os.path import normpath
+from os.path import basename
+from os.path import join
 import requests
 from src.utils import log
 from src.utils import LANGUAGE_TRANSLATION_DICT
 from src.utils import ENDPOINT_LUPO
 from src.utils import HEADERS_LUPO
-
+from src.utils import SPEED_CONSTANTS
+from src.utils import PITCH_CONSTANTS
+from src.utils import upload_file_to_azure_blob_storage
+from src.entities.tts_components import TTSComponents
+from src.entities.settings import Settings
 
 def validate_yaml_file_details(yaml_dict:str):
     '''Validate the details of the yaml file
@@ -83,11 +90,12 @@ def validate_yaml_file_details(yaml_dict:str):
         style_speaker = "default"
 
 
-    #tts_components = TTSComponents(
-    #        course_speaker,  rectify_speed(audio_speed), rectify_pitch(audio_pitch), style_speaker)
+    tts_components = TTSComponents(
+            course_speaker,  rectify_speed(audio_speed), rectify_pitch(audio_pitch), style_speaker)
 
+    print("tts_components", tts_components)
 
-    #return Settings(root_folder, yaml_dict, course_name, course_version, tts_components,languages_to_translate,mail,themes, trailer_mode)
+    return Settings(yaml_dict, course_name, course_version, tts_components, languages_to_translate,themes, trailer_mode)
 
 
 def slugify(value: str, allow_unicode=False) -> str:
@@ -160,9 +168,7 @@ def has_style_in_lupo(style: str, voice_speaker: str) -> bool:
     response = requests.get(ENDPOINT_LUPO+"/styles", HEADERS_LUPO, timeout=20)
     if response.status_code == 200:
         voices_speaker = response.json()
-        print(voices_speaker)
         voices_speaker = voices_speaker['voices_with_styles']
-        print(voices_speaker)
     else:
         log("Problem with connecting to the API ", "warning")
     if not voice_speaker in voices_speaker:
@@ -197,3 +203,112 @@ def rectify_voice_speaker(voice_speaker: str) -> str:
     log('The voice speaker does not exist', 'warning')
     # TODO: default speaker for each language
     return "en-US-AriaNeural"
+
+
+def rectify_speed(speed: str) -> str:
+    '''Check if exist the rate for the text-to-speech
+
+    Parameters:
+        speed (str): Indicate the speaking rate of the text
+
+    Return:
+        str : The speaking rate (default=default)
+    '''
+    if isinstance(speed, float) or speed == 2:
+        if speed > 2 or speed < 0.5:
+            log('The speed range must be between 0.5 and 2', 'warning')
+        return str(speed)
+    if speed in SPEED_CONSTANTS:
+        return str(SPEED_CONSTANTS[speed])
+    log('The speed constant does not exist', 'warning')
+    return 'default'
+
+
+
+def rectify_pitch(pitch: str) -> str:
+    '''Check if exist the pitch for the text-to-speech
+
+    Parameters:
+        speed (str): Indicate the baseline pitch for the text
+
+    Return:
+        str : The speaking rate (default=default)
+    '''
+
+    if isinstance(pitch, str):
+        if not pitch in PITCH_CONSTANTS:
+            log('The pitch constant does not exist', 'warning')
+            pitch = PITCH_CONSTANTS['default']
+        else:
+            pitch = PITCH_CONSTANTS[pitch]
+
+    result = int((pitch - 1) * 100)
+    if result == 0:
+        return "default"
+    if pitch < 0.5 or pitch > 1.5:
+        log('The pitch range must be between 0.5 and 1.5', 'warning')
+    return f"+{result}.00%" if result > 0 else f"{result}.00%"
+
+
+
+def is_path_creatable(pathname: str) -> bool:
+    '''Check if the path is creatable.
+
+        Parameters:
+            pathname (str): Path to check
+
+        Return:
+            bool: True if the string has sufficient permissions to create the path
+    '''
+    if bool(re.match('^[a-zA-Z0-9_ ]*$', pathname)) is True:
+        return True
+    return False
+
+
+
+def fix_relative_paths(markdown_text: str, markdown_absolute_path: str, course_name):
+    '''Change each resource path (image, video, backgroundImage) to their respective azure urls
+
+    Parameters:
+        markdown_text (str): Content of the markdown of the section
+        markdown_absolute_path (str): path of the markdown
+    '''
+    regex_list = [
+        r"!\[(.*)\]\((?!(http|https)://)(.*)\)",
+        r"'!\[(.*)\]\((?!(http|https)://)(.*)\)'", #with ' for footer in content
+        r"(backgroundImage):\s*url\((?!(http|https)://)(.*)\)",
+        r"<video(.*)src=[\"'](?!(http|https)://)(.*)[\"'](.*)>"
+    ] 
+
+    for regex in regex_list:
+        matches = re.finditer(regex, markdown_text, re.MULTILINE)
+        for match in matches:
+            filename = match.group(3)
+            print("filename", filename)
+            if "../" in filename: # If not are in the same folder as the md
+                filename_temp = filename.replace("../", "")
+                local_file =  "./" + filename_temp  ##CHECK
+                print("file with .. aer:",local_file )
+            else:
+                local_file = normpath(join(markdown_absolute_path, filename)).replace("\\", "/")
+                print("print no", local_file)
+
+
+            if exists(local_file):
+                print("exist file")
+                file_name = basename(local_file)
+                url = upload_file_to_azure_blob_storage("courses",
+                    local_file,
+                    blob_name=f"{course_name}/assets/{file_name}")
+                markdown_text = markdown_text.replace(filename, url)
+            else:
+                log(f"The media path does not exist {local_file}", "warning") 
+    if "<video" in markdown_text:
+        if "```" in markdown_text:  # patch again
+            pass
+        else:
+            markdown_text = markdown_text.replace(
+                "<video", "<video width=\"1280\" height=\"720\" ")
+
+    print("markdown_text", markdown_text)
+    return markdown_text

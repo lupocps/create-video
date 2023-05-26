@@ -2,12 +2,13 @@
 
 from os import environ
 #import requests
-from io import StringIO
+
 from src.lupo.user_verification import user_verification
 from src.lupo.compiler_lupo import validate_yaml_file_details
 
 from src.utils import read_toc
-
+from src.utils import log
+from src.entities.course import Course
 
 def main():
     ''' Main method '''
@@ -25,8 +26,16 @@ def main():
 
 
     #COMPILER
-    validate_yaml_file_details(yaml_dict)
+    #DETAILS
+    settings = validate_yaml_file_details(yaml_dict)
 
+    print("settings", settings)
+    # STRUCTURE AND FILL ENTITIES
+
+    log('[1/2] Validation. Starting slides validation.', 'info')
+    course = Course(settings)
+    print("course", course)
+    log('Validation complete.', 'info')
 
 
 
