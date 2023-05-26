@@ -4,9 +4,7 @@ import unicodedata
 import json
 import re
 from os.path import exists
-from os.path import normpath
-from os.path import basename
-from os.path import join
+
 import requests
 from src.utils import log
 from src.utils import LANGUAGE_TRANSLATION_DICT
@@ -14,7 +12,7 @@ from src.utils import ENDPOINT_LUPO
 from src.utils import HEADERS_LUPO
 from src.utils import SPEED_CONSTANTS
 from src.utils import PITCH_CONSTANTS
-from src.utils import upload_file_to_azure_blob_storage
+
 from src.entities.tts_components import TTSComponents
 from src.entities.settings import Settings
 
@@ -266,49 +264,3 @@ def is_path_creatable(pathname: str) -> bool:
 
 
 
-def fix_relative_paths(markdown_text: str, markdown_absolute_path: str, course_name):
-    '''Change each resource path (image, video, backgroundImage) to their respective azure urls
-
-    Parameters:
-        markdown_text (str): Content of the markdown of the section
-        markdown_absolute_path (str): path of the markdown
-    '''
-    regex_list = [
-        r"!\[(.*)\]\((?!(http|https)://)(.*)\)",
-        r"'!\[(.*)\]\((?!(http|https)://)(.*)\)'", #with ' for footer in content
-        r"(backgroundImage):\s*url\((?!(http|https)://)(.*)\)",
-        r"<video(.*)src=[\"'](?!(http|https)://)(.*)[\"'](.*)>"
-    ] 
-
-    for regex in regex_list:
-        matches = re.finditer(regex, markdown_text, re.MULTILINE)
-        for match in matches:
-            filename = match.group(3)
-            print("filename", filename)
-            if "../" in filename: # If not are in the same folder as the md
-                filename_temp = filename.replace("../", "")
-                local_file =  "./" + filename_temp  ##CHECK
-                print("file with .. aer:",local_file )
-            else:
-                local_file = normpath(join(markdown_absolute_path, filename)).replace("\\", "/")
-                print("print no", local_file)
-
-
-            if exists(local_file):
-                print("exist file")
-                file_name = basename(local_file)
-                url = upload_file_to_azure_blob_storage("courses",
-                    local_file,
-                    blob_name=f"{course_name}/assets/{file_name}")
-                markdown_text = markdown_text.replace(filename, url)
-            else:
-                log(f"The media path does not exist {local_file}", "warning") 
-    if "<video" in markdown_text:
-        if "```" in markdown_text:  # patch again
-            pass
-        else:
-            markdown_text = markdown_text.replace(
-                "<video", "<video width=\"1280\" height=\"720\" ")
-
-    print("markdown_text", markdown_text)
-    return markdown_text
