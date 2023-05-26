@@ -2,10 +2,11 @@
 '''
 
 
-from settings import Settings
+
 from src.utils import log
 from src.lupo.compiler_lupo import slugify
 from src.lupo.compiler_lupo import is_path_creatable
+from src.entities.settings import Settings
 
 class Course:
     ''' This class contains all the chapters of the course.
