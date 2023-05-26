@@ -34,14 +34,15 @@ class Course:
                     if not is_path_creatable(str(chapter['name'])):
                         log(f"Special characters in folder {chapter['name']} are not allowed .", 'warning')
                     chapter_name = slugify(chapter['name'])
-                    self.chapters.append(
-                        Chapter(
-                            chapter_id = chapter_id,
-                            name = chapter_name, 
-                            yml_sections = chapter["sections"],
-                            settings = settings
-                        )
-                    )
+                    print("chapter_name", chapter_name)
+                    #self.chapters.append(
+                    #    Chapter(
+                     #       chapter_id = chapter_id,
+                     #       name = chapter_name, 
+                    #       yml_sections = chapter["sections"],
+                     #       settings = settings
+                      #  )
+                  #  )
                     chapter_id += 1
                 else:
                     log("The 'sections' or 'name' key is not found in one chapter", "error")
