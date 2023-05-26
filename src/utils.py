@@ -50,7 +50,6 @@ LANGUAGE_TRANSLATION_DICT = {
 }
 
 
-
 def log(message: str, level: str = logging.INFO):
     '''Log a message to the console using the specified logging level.
 
