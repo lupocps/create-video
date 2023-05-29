@@ -287,7 +287,7 @@ def fix_relative_paths(markdown_text: str, markdown_absolute_path: str, course_n
             if "../" in filename: # If not are in the same folder as the md
                 print("the file name in the if is", filename)
                 filename_temp = filename.replace("../", "")
-                local_file = "/" + filename_temp
+                local_file = filename_temp
                 print("the local file in the if is ", local_file)
             else:
                 local_file = normpath(join(markdown_absolute_path, filename)).replace("\\", "/")
