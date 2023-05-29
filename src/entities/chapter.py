@@ -42,7 +42,6 @@ class Chapter:
             if "name" in section and "href" in section:
                 if not is_path_creatable(str(section['name'])):
                     log(f"Special characters in folder {section['name']} are not allowed .", 'warning')
-
                 section_name = slugify(section['name'])
                 self.sections.append(
                      Section(

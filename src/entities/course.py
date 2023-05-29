@@ -33,7 +33,6 @@ class Course:
                     if not is_path_creatable(str(chapter['name'])):
                         log(f"Special characters in folder {chapter['name']} are not allowed .", 'warning')
                     chapter_name = slugify(chapter['name'])
-                    print("chapter_name", chapter_name)
                     self.chapters.append(
                         Chapter(
                             chapter_id = chapter_id,

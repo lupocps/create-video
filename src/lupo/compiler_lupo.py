@@ -94,7 +94,6 @@ def validate_yaml_file_details(yaml_dict:str):
     tts_components = TTSComponents(
             course_speaker,  rectify_speed(audio_speed), rectify_pitch(audio_pitch), style_speaker)
 
-    print("tts_components", tts_components)
 
     return Settings(yaml_dict, course_name, course_version, tts_components, languages_to_translate,themes, trailer_mode)
 
@@ -283,7 +282,7 @@ def fix_relative_paths(markdown_text: str, markdown_absolute_path: str, course_n
     for regex in regex_list:
         matches = re.finditer(regex, markdown_text, re.MULTILINE)
         for match in matches:
-            print("The match is:", match)
+            print("The match is:", match.group(3))
             filename = match.group(3)
             if "../" in filename: # If not are in the same folder as the md
                 print("the file name in the if is", filename)
