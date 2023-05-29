@@ -5,7 +5,7 @@ from src.utils import log
 from src.lupo.compiler_lupo import slugify
 from src.lupo.compiler_lupo import is_path_creatable
 from src.entities.settings import Settings
-#from section import Section
+from src.entities.section import Section
 
 
 class Chapter:
@@ -44,14 +44,14 @@ class Chapter:
                     log(f"Special characters in folder {section['name']} are not allowed .", 'warning')
 
                 section_name = slugify(section['name'])
-                # self.sections.append(
-                #     Section(
-                #         section_id=section_id,
-                #         name=section_name,
-                #         markdown_file=section["href"],
-                #         settings=settings
-                #     )
-                # )
+                self.sections.append(
+                     Section(
+                         section_id=section_id,
+                         name=section_name,
+                         markdown_file=section["href"],
+                         settings=settings
+                     )
+                 )
 
                 section_id += 1
             else:
