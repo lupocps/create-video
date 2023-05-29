@@ -6,6 +6,7 @@ from src.utils import log
 from src.lupo.compiler_lupo import slugify
 from src.lupo.compiler_lupo import is_path_creatable
 from src.entities.settings import Settings
+from src.entities.chapter import Chapter
 
 class Course:
     ''' This class contains all the chapters of the course.
@@ -33,14 +34,14 @@ class Course:
                         log(f"Special characters in folder {chapter['name']} are not allowed .", 'warning')
                     chapter_name = slugify(chapter['name'])
                     print("chapter_name", chapter_name)
-                    #self.chapters.append(
-                    #    Chapter(
-                     #       chapter_id = chapter_id,
-                     #       name = chapter_name, 
-                    #       yml_sections = chapter["sections"],
-                     #       settings = settings
-                      #  )
-                  #  )
+                    self.chapters.append(
+                        Chapter(
+                            chapter_id = chapter_id,
+                            name = chapter_name, 
+                           yml_sections = chapter["sections"],
+                            settings = settings
+                        )
+                    )
                     chapter_id += 1
                 else:
                     log("The 'sections' or 'name' key is not found in one chapter", "error")
