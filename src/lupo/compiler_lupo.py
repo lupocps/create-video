@@ -4,7 +4,9 @@ import unicodedata
 import json
 import re
 from os.path import exists
-
+from os.path import normpath
+from os.path import join
+from os.path import basename
 import requests
 from src.utils import log
 from src.utils import LANGUAGE_TRANSLATION_DICT
@@ -15,6 +17,7 @@ from src.utils import PITCH_CONSTANTS
 
 from src.entities.tts_components import TTSComponents
 from src.entities.settings import Settings
+
 
 def validate_yaml_file_details(yaml_dict:str):
     '''Validate the details of the yaml file
@@ -29,8 +32,8 @@ def validate_yaml_file_details(yaml_dict:str):
     '''
     #root_folder = root_folder.replace("\\", "/")
 
-    course_name = yaml_dict['name'] if 'name' in yaml_dict else '' 
-    course_version = yaml_dict['version'] if 'version' in yaml_dict else '' 
+    course_name = yaml_dict['name'] if 'name' in yaml_dict else ''
+    course_version = yaml_dict['version'] if 'version' in yaml_dict else ''
     course_speaker = yaml_dict['speaker'] if 'speaker' in yaml_dict else ''
     trailer_mode = yaml_dict['trailer'] if 'trailer' in yaml_dict else False
 
@@ -54,20 +57,20 @@ def validate_yaml_file_details(yaml_dict:str):
 
 
     languages_to_translate = yaml_dict['translate'] if 'translate' in yaml_dict else '' 
-    
+
     style_speaker = yaml_dict['style'] if 'style' in yaml_dict else 'default'
     audio_speed = yaml_dict['speed'] if 'speed' in yaml_dict else 1.0
     audio_pitch = yaml_dict['pitch'] if 'pitch' in yaml_dict else 1.0
-    
+
     # Check if file exists
     themes = "" #
- 
+
     if exists("./.vscode/settings.json"):
         with open("./.vscode/settings.json", encoding="utf-8") as file:
             try:
                 data = json.load(file)
                 if "markdown.marp.themes" in data:
-                    themes = " ".join([t for t in data["markdown.marp.themes"]])
+                    themes = " ".join(t for t in data["markdown.marp.themes"])
                 else:
                     log("No 'markdown.marp.themes' attribute found in settings.json", 'warning')
             except FileNotFoundError:
@@ -261,6 +264,56 @@ def is_path_creatable(pathname: str) -> bool:
     if bool(re.match('^[a-zA-Z0-9_ ]*$', pathname)) is True:
         return True
     return False
+
+
+def fix_relative_paths(markdown_text: str, markdown_absolute_path: str, course_name):
+    '''Change each resource path (image, video, backgroundImage) to their respective azure urls
+
+    Parameters:
+        markdown_text (str): Content of the markdown of the section
+        markdown_absolute_path (str): path of the markdown
+    '''
+    regex_list = [
+        r"!\[(.*)\]\((?!(http|https)://)(.*)\)",
+        r"'!\[(.*)\]\((?!(http|https)://)(.*)\)'", #WITH ' for footer in content
+        r"(backgroundImage):\s*url\((?!(http|https)://)(.*)\)",
+        r"<video(.*)src=[\"'](?!(http|https)://)(.*)[\"'](.*)>"
+    ] 
+
+    for regex in regex_list:
+        matches = re.finditer(regex, markdown_text, re.MULTILINE)
+        for match in matches:
+            print("The match is:", match)
+            filename = match.group(3)
+            if "../" in filename: # If not are in the same folder as the md
+                print("the file name in the if is", filename)
+                filename_temp = filename.replace("../", "")
+                local_file = "/" + filename_temp
+                print("the local file in the if is ", filename)
+            else:
+                local_file = normpath(join(markdown_absolute_path, filename)).replace("\\", "/")
+                print("the local file in the else is", filename)
+
+            if exists(local_file):
+                print("exist the file")
+                file_name = basename(local_file)
+                print("base name", file_name)
+              #  url = upload_file_to_azure_blob_storage("courses",
+               #     local_file,
+                #    blob_name=f"{course_name}/assets/{file_name}")
+              #  markdown_text = markdown_text.replace(filename, url)
+            else:
+                print("the file $ does not exist", local_file)
+                log(f"The media path does not exist {local_file}", "warning")
+    if "<video" in markdown_text:
+        if "```" in markdown_text:  # patch again
+            pass
+        else:
+            markdown_text = markdown_text.replace(
+                "<video", "<video width=\"1280\" height=\"720\" ")
+
+    return markdown_text
+
 
 
 

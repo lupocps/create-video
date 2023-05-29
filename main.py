@@ -25,19 +25,19 @@ def main():
     user_details = user_verification(is_final)
 
 
-    #COMPILER
-    #DETAILS
+    ##COMPILER DETAILS
     settings = validate_yaml_file_details(yaml_dict)
 
-    print("settings", settings)
-
+    ##COMPILER BODY
     # Create course objects
     log('[1/2] Validation. Starting slides validation.', 'info')
     course = Course(settings)
     log('Validation complete.', 'info')
 
 
-
+    # Generate one video per chapter
+    log('[2/2] Generation. Starting Content Generation.', 'info')
+    azure_folder = f"{settings.course_name}/{settings.course_version}/{settings.course_uuid}"
 
 
 
