@@ -4,11 +4,9 @@ import os
 from src.utils import log
 from src.lupo.compiler_lupo import slugify
 from src.lupo.compiler_lupo import is_path_creatable
-from settings import Settings
+from src.entities.settings import Settings
 #from section import Section
-from src.utils import log
-from src.lupo.compiler_lupo import is_path_creatable
-from src.lupo.compiler_lupo import slugify
+
 
 class Chapter:
     '''This class contains all sections of the chapter.
