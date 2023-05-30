@@ -299,10 +299,11 @@ def fix_relative_paths(markdown_text: str, markdown_absolute_path: str, course_n
                 print("exist the file")
                 file_name = basename(local_file)
                 print("base name", file_name)
-                url = upload_file_to_azure_blob_storage("courses",
-                    local_file,
-                    blob_name=f"{course_name}/assets/{file_name}")
-                print("url", url)
+                #url = upload_file_to_azure_blob_storage("courses",
+                 #   local_file,
+                 #   blob_name=f"{course_name}/assets/{file_name}")
+               # print("url", url)
+                url = "a"
                 markdown_text = markdown_text.replace(filename, url)
                 print("markdown_text?DDDD", markdown_text)
             else:
