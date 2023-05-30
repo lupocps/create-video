@@ -74,8 +74,9 @@ class Section:
             print("markdown_text_before_validation", content)
             if "silence.mp3" in audio_note:
                 #Check this
-                print("current_directory in silence page", current_directory)
+     
                 current_directory = os.getcwd().replace("\\", "/")
+                print("current_directory in silence page", current_directory)
                 silence_path = f"{current_directory}/{audio_note}"
                 print("silence_path", silence_path)
                 markdown_text_validate += f"<!--{silence_path}-->"
