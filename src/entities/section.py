@@ -53,6 +53,22 @@ class Section:
         
         markdown_slides = [slide for slide in re.split(r"\-\-\-\s?\n", markdown_text) if slide.strip() != '']
         print("the markdown slides are", markdown_slides)
+
+        markdown_header = markdown_slides[1]
+
+        print("markdown_header", markdown_header)
+       # markdown_header, current_theme_file = validate_header(markdown_header, settings.themes, settings.mail, self.name)
+        #print("markdown_header_new", markdown_header)
+
+
+        page_id = 1
+        for page in markdown_slides[1:]:
+            result = re.search(r"((.|\n)*)<!--\s*((.|\n)*)\s*-->", page)
+            markdown_text = result.group(1)
+            audio_note = result.group(3)
+            print("markdown_text", markdown_text)
+            print("audio_note", audio_note)
+          #  content, audio_note = extract_content_audio_compiler(page, page_id, section_file_name) 
     
 
 

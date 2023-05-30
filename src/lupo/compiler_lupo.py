@@ -14,6 +14,8 @@ from src.utils import ENDPOINT_LUPO
 from src.utils import HEADERS_LUPO
 from src.utils import SPEED_CONSTANTS
 from src.utils import PITCH_CONSTANTS
+from src.utils import MARP_DIRECTIVES
+from src.utils import upload_file_to_azure_blob_storage
 
 from src.entities.tts_components import TTSComponents
 from src.entities.settings import Settings
@@ -297,10 +299,10 @@ def fix_relative_paths(markdown_text: str, markdown_absolute_path: str, course_n
                 print("exist the file")
                 file_name = basename(local_file)
                 print("base name", file_name)
-              #  url = upload_file_to_azure_blob_storage("courses",
-               #     local_file,
-                #    blob_name=f"{course_name}/assets/{file_name}")
-              #  markdown_text = markdown_text.replace(filename, url)
+                url = upload_file_to_azure_blob_storage("courses",
+                    local_file,
+                    blob_name=f"{course_name}/assets/{file_name}")
+                markdown_text = markdown_text.replace(filename, url)
             else:
                 print("the file $ does not exist", local_file)
                 log(f"The media path does not exist {local_file}", "warning")
@@ -312,6 +314,102 @@ def fix_relative_paths(markdown_text: str, markdown_absolute_path: str, course_n
                 "<video", "<video width=\"1280\" height=\"720\" ")
 
     return markdown_text
+
+
+
+def validate_header(markdown_header:str, themes:str, md_file:str) -> list:
+    '''Validate the header of the markdown
+    
+    Parameters:
+        markdown_header(str):
+        themes (str):
+        mail (Email):
+        md_file (str):
+
+    Return:
+        (str):
+        (str):
+
+    '''
+    directives = markdown_header.split("\n")
+    directives = list(filter(lambda item: item != '', directives)) # Remove '' elements
+    header_validated = "---\n"
+    current_theme = ""
+    if not directives[0].startswith("marp: true"):
+        log(f"The marp directive in the section {md_file} is not found", "error")
+    else:
+        header_validated += directives[0] + "\n"
+    for directive in directives[1:]:
+        if directive.startswith("theme: "):
+            current_theme = validate_theme_file(directive, themes, md_file)
+            header_validated += directive + "\n"
+        elif directive.startswith(MARP_DIRECTIVES):
+            header_validated += directive + "\n" # CHECK THE FORMAT OF THE MARP DIRECTIVE?
+        else:
+            log(f"The format of the header in the file {md_file} not is correct", "error")
+
+    header_validated += "---" + "\n\n"
+    return header_validated, current_theme
+
+
+
+def validate_theme_file(current_theme:str, themes:str, md_file:str) -> str:
+    '''Validate if exists a theme file in a markdown file
+    
+    Parameters:
+        current_theme (str):
+        themes (str):
+        md_file (str):
+    
+    Return:
+        (str):
+    '''
+    substring = "theme:"
+    current_theme = current_theme.split(substring, 1)[-1].strip()
+    current_theme_file = f"{current_theme}.css"
+    themes = themes.split(" ")
+    for theme in themes:
+        theme_name = basename(theme)
+        if current_theme_file == theme_name:
+            if exists(theme):
+                return theme
+            log(f"The theme {theme} does not exists", "warning")
+            return ""
+
+    log(f"The theme of the file {md_file} does not exist in the local themes", "warning")
+    return ""
+
+
+
+def extract_content_audio_compiler(markdown_page: str, page_id, section_file_name: str):
+    '''Extract the content and audio for each page
+    
+    Parameters:
+        markdown_page (str): markdown page
+        page_id (str): id of the page
+        section_file_name (str): section file name
+
+    Return:
+        list():
+
+    '''
+    if markdown_page == "":
+        log(f"The slide number {page_id} of the file {section_file_name} is empty", "warning")
+
+    result = re.search(r"((.|\n)*)<!--\s*((.|\n)*)\s*-->", markdown_page)
+    
+    if result is None: # NO audio TAG
+        log(f"The are not a narration tag in {section_file_name} in the slide number {page_id}", "warning")
+        return markdown_page, "silences/silence.mp3"
+    audio_note = result.group(3).strip()
+    markdown_text = result.group(1).strip()
+    if audio_note == '': # AUDIO TAG EMPTY
+        log(f"The are a narration empty in {section_file_name} in the slide number {page_id}", "warning")
+        return markdown_text, "silences/silence.mp3"
+    if audio_note.startswith(MARP_DIRECTIVES): ## AUDIOTAG WITH MARP DIRECTIVES
+        log(f"The narration cannot have marp directive in {section_file_name} in the slide number {page_id}", "warning")
+        return markdown_page, "silences/silence.mp3"
+    return markdown_text, audio_note
 
 
 
