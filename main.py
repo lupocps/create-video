@@ -3,7 +3,7 @@
 from os import environ
 #import requests
 
-from src.lupo.user_verification import user_verification
+#from src.lupo.user_verification import user_verification
 from src.lupo.compiler_lupo import validate_yaml_file_details
 
 from src.utils import read_toc
