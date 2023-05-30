@@ -54,7 +54,7 @@ class Section:
         markdown_slides = [slide for slide in re.split(r"\-\-\-\s?\n", markdown_text) if slide.strip() != '']
         print("the markdown slides are", markdown_slides)
 
-        markdown_header = markdown_slides[1]
+        markdown_header = markdown_slides[0]
 
         print("markdown_header", markdown_header)
        # markdown_header, current_theme_file = validate_header(markdown_header, settings.themes, settings.mail, self.name)
