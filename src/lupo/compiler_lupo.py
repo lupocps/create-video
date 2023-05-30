@@ -284,30 +284,30 @@ def fix_relative_paths(markdown_text: str, markdown_absolute_path: str, course_n
     for regex in regex_list:
         matches = re.finditer(regex, markdown_text, re.MULTILINE)
         for match in matches:
-            print("The match is:", match.group(3))
+          #  print("The match is:", match.group(3))
             filename = match.group(3)
             if "../" in filename: # If not are in the same folder as the md
-                print("the file name in the if is", filename)
+              #  print("the file name in the if is", filename)
                 filename_temp = filename.replace("../", "")
                 local_file = filename_temp
-                print("the local file in the if is ", local_file)
+              #  print("the local file in the if is ", local_file)
             else:
                 local_file = normpath(join(markdown_absolute_path, filename)).replace("\\", "/")
-                print("the local file in the else is", filename)
+              #  print("the local file in the else is", filename)
 
             if exists(local_file):
-                print("exist the file")
+              #  print("exist the file")
                 file_name = basename(local_file)
-                print("base name", file_name)
-                url = upload_file_to_azure_blob_storage("courses",
-                    local_file,
-                    blob_name=f"{course_name}/assets/{file_name}")
-                print("url", url)
-                url = "a"
-                markdown_text = markdown_text.replace(filename, url)
-                print("markdown_text?DDDD", markdown_text)
+              #  print("base name", file_name)
+               # url = upload_file_to_azure_blob_storage("courses",
+               #     local_file,
+              #      blob_name=f"{course_name}/assets/{file_name}")
+               # print("url", url)
+               # url = "a"
+              #  markdown_text = markdown_text.replace(filename, url)
+                #print("markdown_text?DDDD", markdown_text)
             else:
-                print("the file $ does not exist", local_file)
+             #   print("the file $ does not exist", local_file)
                 log(f"The media path does not exist {local_file}", "warning")
     if "<video" in markdown_text:
         if "```" in markdown_text:  # patch again
