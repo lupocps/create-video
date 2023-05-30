@@ -4,7 +4,7 @@ import os
 import sys
 import logging
 import yaml
-from azure.storage.blob import BlobServiceClient
+#from azure.storage.blob import BlobServiceClient
 
 HEADERS_LUPO = {'Content-Type': 'application/json',
             'Accept': '*/*',
