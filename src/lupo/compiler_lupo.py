@@ -320,7 +320,7 @@ def fix_relative_paths(markdown_text: str, markdown_absolute_path: str, course_n
 
 
 
-def validate_header(markdown_header:str, themes:str, md_file:str) -> list:
+def validate_header(markdown_header:str, themes:str, section_name:str) -> list:
     '''Validate the header of the markdown
     
     Parameters:
@@ -339,24 +339,26 @@ def validate_header(markdown_header:str, themes:str, md_file:str) -> list:
     header_validated = "---\n"
     current_theme = ""
     if not directives[0].startswith("marp: true"):
-        log(f"The marp directive in the section {md_file} is not found", "error")
+        log(f"The marp directive in the section {section_name} is not found", "error")
     else:
+        print("marp check")
         header_validated += directives[0] + "\n"
     for directive in directives[1:]:
         if directive.startswith("theme: "):
-            current_theme = validate_theme_file(directive, themes, md_file)
+            print("check theme")
+            current_theme = validate_theme_file(directive, themes, section_name)
             header_validated += directive + "\n"
         elif directive.startswith(MARP_DIRECTIVES):
             header_validated += directive + "\n" # CHECK THE FORMAT OF THE MARP DIRECTIVE?
         else:
-            log(f"The format of the header in the file {md_file} not is correct", "error")
+            log(f"The format of the header in the file {section_name} not is correct", "error")
 
     header_validated += "---" + "\n\n"
     return header_validated, current_theme
 
 
 
-def validate_theme_file(current_theme:str, themes:str, md_file:str) -> str:
+def validate_theme_file(current_theme:str, themes:str, section_name:str) -> str:
     '''Validate if exists a theme file in a markdown file
     
     Parameters:
@@ -370,16 +372,18 @@ def validate_theme_file(current_theme:str, themes:str, md_file:str) -> str:
     substring = "theme:"
     current_theme = current_theme.split(substring, 1)[-1].strip()
     current_theme_file = f"{current_theme}.css"
+    print("current_theme_file", current_theme_file)
     themes = themes.split(" ")
     for theme in themes:
         theme_name = basename(theme)
         if current_theme_file == theme_name:
             if exists(theme):
+                print("exist theme", theme)
                 return theme
             log(f"The theme {theme} does not exists", "warning")
             return ""
 
-    log(f"The theme of the file {md_file} does not exist in the local themes", "warning")
+    log(f"The theme of the file {section_name} does not exist in the local themes", "warning")
     return ""
 
 
@@ -400,20 +404,47 @@ def extract_content_audio_compiler(markdown_page: str, page_id, section_file_nam
         log(f"The slide number {page_id} of the file {section_file_name} is empty", "warning")
 
     result = re.search(r"((.|\n)*)<!--\s*((.|\n)*)\s*-->", markdown_page)
-    
+  
     if result is None: # NO audio TAG
         log(f"The are not a narration tag in {section_file_name} in the slide number {page_id}", "warning")
-        return markdown_page, "silences/silence.mp3"
+        return markdown_page, "../utils/silence.mp3"
     audio_note = result.group(3).strip()
     markdown_text = result.group(1).strip()
     if audio_note == '': # AUDIO TAG EMPTY
         log(f"The are a narration empty in {section_file_name} in the slide number {page_id}", "warning")
-        return markdown_text, "silences/silence.mp3"
+        return markdown_text, "../utils/silence.mp3"
     if audio_note.startswith(MARP_DIRECTIVES): ## AUDIOTAG WITH MARP DIRECTIVES
         log(f"The narration cannot have marp directive in {section_file_name} in the slide number {page_id}", "warning")
-        return markdown_page, "silences/silence.mp3"
+        return markdown_page, "../utils/silence.mp3"
     return markdown_text, audio_note
 
 
 
+def validate_md_content(markdown_content:str, page_id:int, section_file_name:str, current_theme_file:str) -> str:
+    '''Validate the content of a markdown file 
+    
+    Parameters:
+        markdown_content (str):
+        page_id (int):
+        section_file_name (str):
+        current_theme_file (str):
+    
+    Return:
+        (str):
+    '''
+    if markdown_content == "": #Content empty
+        log(f"The content of a slide number {page_id} of the file {section_file_name} is empty", "warning")
+        markdown_content = "\n"
+    else:
+        if current_theme_file != "":
+            theme_regex = r'<!--\s*[_]?class:\s*(\w+)\s*-->'
+            matches = re.findall(theme_regex, markdown_content)
+            for match in matches:
+                with open(current_theme_file, "r", encoding='utf-8') as file:
+                    content = file.read()
+                    if not match in content:
+                        log(f"The class {match} is not in {current_theme_file} file", "warning")
+        else:
+            log("The MD does not using a theme", "warning")
+    return markdown_content + "\n\n"
 
