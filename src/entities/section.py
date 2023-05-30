@@ -79,7 +79,7 @@ class Section:
                 print("current_directory in silence page", current_directory)
                 silence_path = f"{current_directory}/{audio_note}"
                 print("silence_path", silence_path)
-                markdown_text_validate += f"<!--{silence_path}-->"
+                markdown_text_validate = f"<!--{silence_path}-->"
                 print("markdown_text_validate", markdown_text_validate)
             else:
                # markdown_text_validate += validate_narration(settings.tts_components, audio_note, settings.root_folder, page_id, section_file_name)
