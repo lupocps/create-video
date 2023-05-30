@@ -302,7 +302,9 @@ def fix_relative_paths(markdown_text: str, markdown_absolute_path: str, course_n
                 url = upload_file_to_azure_blob_storage("courses",
                     local_file,
                     blob_name=f"{course_name}/assets/{file_name}")
+                print("url", url)
                 markdown_text = markdown_text.replace(filename, url)
+                print("markdown_text?DDDD", markdown_text)
             else:
                 print("the file $ does not exist", local_file)
                 log(f"The media path does not exist {local_file}", "warning")
