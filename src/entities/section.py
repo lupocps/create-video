@@ -74,7 +74,9 @@ class Section:
                 #Check this
      
         
-                silence_path = f"{audio_note}"
+
+                silence_path = os.path.abspath(os.path.join(os.path.dirname(__file__), audio_note))
+                print("silence_path_before", silence_path)
                 if exists(silence_path):
                     print("silence_path", silence_path)
                 markdown_text_validate = f"<!--{silence_path}-->"
