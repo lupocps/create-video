@@ -464,7 +464,7 @@ def validate_narration(tts_components: TTSComponents, audio_note: str, page_id: 
 
     audio_note = replace_characters(audio_note)
     audio_note = validate_phonemes(audio_note)
-
+    print("audio_note before validate phonemes", audio_note)
     has_time = re.search(
         r'^\(\(', audio_note, re.MULTILINE)  # Has time
 
@@ -595,21 +595,15 @@ def validate_phonemes(audio_notes: str, ) -> str:
 
     current_dir = os.path.dirname(os.path.abspath(__file__))
     phonemes_known_file = os.path.join(current_dir, "../../phonemes-known.txt")
-    print("phonemes_known_file", phonemes_known_file)
-    if exists(phonemes_known_file):
-        print("exist phonemes_known_file", phonemes_known_file)
     if exists(phonemes_known_file) and getsize(phonemes_known_file) > 0:
-        print("enter exist pthoneme")
         phoneme_known_dict = phonemes_dict(phonemes_known_file)
         # Remove any duplicates between the two dictionaries
         if phoneme_dict:  # DOES NOT WORK IF THE phonemes file does not exists
             for word in phoneme_dict:
                 if word in phoneme_known_dict:
                     del phoneme_known_dict[word]
-        print("audio_notes final", audio_notes)
-        print("phoneme_known_dict", phoneme_known_dict)
+
         audio_notes = phonemes(audio_notes, phoneme_known_dict)
-    print("audionotes phonemas", audio_notes)
     return audio_notes
 
 
