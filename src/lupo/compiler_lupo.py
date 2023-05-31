@@ -372,20 +372,17 @@ def validate_theme_file(current_theme:str, themes:str, section_name:str) -> str:
     substring = "theme:"
     current_theme = current_theme.split(substring, 1)[-1].strip()
     current_theme_file = f"{current_theme}.css"
-    print("current_theme_file", current_theme_file)
     themes = themes.split(" ")
     for theme in themes:
         theme_name = basename(theme)
         if current_theme_file == theme_name:
             if exists(theme):
-                print("exist theme", theme)
                 return theme
             log(f"The theme {theme} does not exists", "warning")
             return ""
-
+    
     log(f"The theme of the file {section_name} does not exist in the local themes", "warning")
     return ""
-
 
 
 def extract_content_audio_compiler(markdown_page: str, page_id, section_file_name: str):
