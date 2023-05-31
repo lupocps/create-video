@@ -542,7 +542,6 @@ def replace_characters(audio_notes: str) -> str:
 
     if exists(characters_file) and getsize(characters_file) > 0:
         # reusing function to fill the dictionary
-        print("audio_notes before replace", audio_notes)
         invalid_dict = phonemes_dict(characters_file)
         audio_notes = replace(audio_notes, invalid_dict)
         print("audio_notes after replace", audio_notes)
@@ -586,10 +585,8 @@ def validate_phonemes(audio_notes: str, ) -> str:
     '''
     phoneme_dict = {}
     phoneme_known_dict = {}
-
+    print("audio_notes began", audio_notes)
     phonemes_file = "./phonemes.txt"
-    if exists(phonemes_file):
-        print("exist phonemes_file", phonemes_file)
     if exists(phonemes_file) and getsize(phonemes_file) > 0:
         phoneme_dict = phonemes_dict(phonemes_file)
         audio_notes = phonemes(audio_notes, phoneme_dict)
@@ -602,12 +599,15 @@ def validate_phonemes(audio_notes: str, ) -> str:
     if exists(phonemes_known_file):
         print("exist phonemes_known_file", phonemes_known_file)
     if exists(phonemes_known_file) and getsize(phonemes_known_file) > 0:
+        print("enter exist pthoneme")
         phoneme_known_dict = phonemes_dict(phonemes_known_file)
         # Remove any duplicates between the two dictionaries
         if phoneme_dict:  # DOES NOT WORK IF THE phonemes file does not exists
             for word in phoneme_dict:
                 if word in phoneme_known_dict:
                     del phoneme_known_dict[word]
+        print("audio_notes final", audio_notes)
+        print("phoneme_known_dict", phoneme_known_dict)
         audio_notes = phonemes(audio_notes, phoneme_known_dict)
     print("audionotes phonemas", audio_notes)
     return audio_notes
