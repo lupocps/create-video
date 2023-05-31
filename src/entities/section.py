@@ -72,10 +72,8 @@ class Section:
             print("markdown_text_before_validation", content)
             if "silence.mp3" in audio_note:
                 #Check this
-     
-        
-
-                silence_path = os.path.abspath(os.path.join(os.path.dirname(__file__), audio_note))
+                current_dir = os.path.dirname(os.path.abspath(__file__))
+                silence_path = os.path.join(current_dir, audio_note)
                 print("silence_path_before", silence_path)
                 if exists(silence_path):
                     print("silence_path", silence_path)
