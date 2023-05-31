@@ -533,8 +533,10 @@ def replace_characters(audio_notes: str) -> str:
         (str): The output text with invalid characters replaced.
     '''
     invalid_dict = {}
-
-    characters_file = "./replace.txt"
+    
+    root_dir = os.path.abspath(os.sep)
+    characters_file = join(root_dir, "replace.txt")
+    print("characters_file", characters_file)
     if exists(characters_file):
         print("characters_file exist", characters_file)
     if exists(characters_file) and getsize(characters_file) > 0:
