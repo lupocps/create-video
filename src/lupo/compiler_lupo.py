@@ -520,7 +520,7 @@ def validate_narration(tts_components: TTSComponents, audio_note: str, page_id: 
                 regex_text, '<mstts:express-as style="default">\\g<0></mstts:express-as>', audio_note, flags=re.M)
             text_audio_notes = re.sub(
                 regex_style, '<mstts:express-as style="\\g<1>">\\g<2></mstts:express-as>',  text_audio_notes)
-    return f"<!--\n{text_audio_notes}\n-->"
+    return text_audio_notes
 
 
 def replace_characters(audio_notes: str) -> str:
@@ -540,14 +540,12 @@ def replace_characters(audio_notes: str) -> str:
     current_dir = os.path.dirname(os.path.abspath(__file__))
     characters_file = os.path.join(current_dir, "../../replace.txt")
 
-    print("characters_file", characters_file)
-    if exists(characters_file):
-        print("characters_file exist", characters_file)
     if exists(characters_file) and getsize(characters_file) > 0:
         # reusing function to fill the dictionary
+        print("audio_notes before replace", audio_notes)
         invalid_dict = phonemes_dict(characters_file)
         audio_notes = replace(audio_notes, invalid_dict)
-        print("audio_notes", audio_notes)
+        print("audio_notes after replace", audio_notes)
         return audio_notes
     else:
         log("The file replace.txt not find or does not have anything in the root folder", "warning")
@@ -598,8 +596,8 @@ def validate_phonemes(audio_notes: str, ) -> str:
     else:
         log("The file phonemes.txt not find or does not have anything in the root folder", "warning")
 
-    root_dir = os.path.abspath(os.sep)
-    phonemes_known_file = join(root_dir, "phonemes-known.txt")
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    phonemes_known_file = os.path.join(current_dir, "../../phonemes-known.txt")
     print("phonemes_known_file", phonemes_known_file)
     if exists(phonemes_known_file):
         print("exist phonemes_known_file", phonemes_known_file)

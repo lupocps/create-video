@@ -79,7 +79,7 @@ class Section:
                 audio_note = silence_path
             else:
                 audio_note = validate_narration(settings.tts_components, audio_note, page_id, self.name)
-                print("audio_note", audio_note)
+                print("audio_note before validate narration", audio_note)
           #  if settings.trailer_mode:
            #     break
            # markdown_text_validate += "\n\n---\n\n"
