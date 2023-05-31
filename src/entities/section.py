@@ -72,20 +72,24 @@ class Section:
             print("markdown_text_before_validation", content)
             if "silence.mp3" in audio_note:
                 #Check this
-                current_dir = os.path.dirname(os.path.abspath(__file__))
-                silence_path = os.path.join(current_dir, audio_note)
+     
+        
+
+                silence_path = os.path.abspath(os.path.join(os.path.dirname(__file__), audio_note))
                 print("silence_path_before", silence_path)
                 if exists(silence_path):
                     print("silence_path", silence_path)
-                markdown_text_validate = f"<!--{silence_path}-->"
-                print("markdown_text_validate", markdown_text_validate)
+                audio_note = silence_path
+                print("audionote validate", audio_note)
             else:
                # markdown_text_validate += validate_narration(settings.tts_components, audio_note, settings.root_folder, page_id, section_file_name)
                 print("hello")
           #  if settings.trailer_mode:
            #     break
-            markdown_text_validate += "\n\n---\n\n"
-            page_id += 1
+           # markdown_text_validate += "\n\n---\n\n"
+           # page_id += 1
+            #page = Page(id=page_id, marp_header=f"---\n{markdown_slides[0]}\n---\n", markdown_text=markdown_text,
+           #             audio_notes=audio_note, section_directory=self.output_directory, settings=settings)
 
 
     
