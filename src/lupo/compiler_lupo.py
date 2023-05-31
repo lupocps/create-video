@@ -538,16 +538,9 @@ def replace_characters(audio_notes: str) -> str:
     characters_file = join(root_dir, "replace.txt")
     
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    print("current?dir",current_dir )
-    file_path = os.path.join(current_dir, "replace.txt")
-    if exists(file_path):
-        print("file_path exist", file_path)
-    file_path_2 = os.path.join(current_dir, "../../replace.txt")
-    if exists(file_path_2):
-        print("file_path_2 exist", file_path_2)
+    characters_file = os.path.join(current_dir, "../../replace.txt")
 
     print("characters_file", characters_file)
-    print("file_path", file_path)
     if exists(characters_file):
         print("characters_file exist", characters_file)
     if exists(characters_file) and getsize(characters_file) > 0:
