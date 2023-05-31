@@ -60,7 +60,7 @@ class Section:
             markdown_text = file.read()
 
             markdown_text = fix_relative_paths(markdown_text, markdown_absolute_path, settings.course_name) # Problem
-            print("The text is", markdown_text)
+           # print("The text is", markdown_text)
         
         markdown_slides = [slide for slide in re.split(r"\-\-\-\s?\n", markdown_text) if slide.strip() != '']
 

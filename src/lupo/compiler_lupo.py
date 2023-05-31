@@ -410,7 +410,7 @@ def extract_content_audio_compiler(markdown_page: str, page_id, section_file_nam
     markdown_text = result.group(1).strip()
     if audio_note == '':  # AUDIO TAG EMPTY
         log(f"The are a narration empty in {section_file_name} in the slide number {page_id}", "warning")
-        return markdown_text, "../../utils/silence.mp3"
+        return markdown_text, "../../utils/silence.mp3" #CHANGE
     if audio_note.startswith(MARP_DIRECTIVES):  # AUDIOTAG WITH MARP DIRECTIVES
         log(
             f"The narration cannot have marp directive in {section_file_name} in the slide number {page_id}", "warning")
@@ -536,7 +536,11 @@ def replace_characters(audio_notes: str) -> str:
     
     root_dir = os.path.abspath(os.sep)
     characters_file = join(root_dir, "replace.txt")
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    print("current?dir",current_dir )
+    file_path = os.path.join(current_dir, "replace.txt")
     print("characters_file", characters_file)
+    print("file_path", file_path)
     if exists(characters_file):
         print("characters_file exist", characters_file)
     if exists(characters_file) and getsize(characters_file) > 0:
