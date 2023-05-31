@@ -55,4 +55,4 @@ class Chapter:
                 section_id += 1
             else:
                 log("The 'href' key is not found in one section", "error")
-        print("sections", self.sections)
+

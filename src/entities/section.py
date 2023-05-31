@@ -10,6 +10,7 @@ from src.utils import log
 from src.lupo.compiler_lupo import fix_relative_paths
 from src.lupo.compiler_lupo import validate_header
 from src.lupo.compiler_lupo import validate_md_content
+from src.lupo.compiler_lupo import validate_narration
 from src.lupo.compiler_lupo import extract_content_audio_compiler
 from src.entities.settings import Settings
 #from page import Page
@@ -43,17 +44,23 @@ class Section:
         self.settings = settings
         self.markdown_file = f"./{markdown_file}"
 
+
+
         print("markdown_file", markdown_file)
         if not exists(markdown_file):
             log(f"Check the toc file, the file {markdown_file} does not exists", "error")
+
+
         markdown_absolute_path = dirname(markdown_file).replace("\\", "/")
         print("markdown_absolute_path", markdown_absolute_path)
+
+
         # Open and Read the markdown content
         with open(markdown_file, "r", encoding="utf-8") as file:
             markdown_text = file.read()
-            # SOLO REVISA EL CONTENIDO?, NO, TAMBIEN REVISA HEADER
-            markdown_text = fix_relative_paths(markdown_text, markdown_absolute_path, settings.course_name)
-            #print("The text is", markdown_text)
+
+            markdown_text = fix_relative_paths(markdown_text, markdown_absolute_path, settings.course_name) # Problem
+            print("The text is", markdown_text)
         
         markdown_slides = [slide for slide in re.split(r"\-\-\-\s?\n", markdown_text) if slide.strip() != '']
 
@@ -66,24 +73,13 @@ class Section:
         page_id = 1
         for page in markdown_slides[1:]:
             content, audio_note = extract_content_audio_compiler(page, page_id, self.name)
-            print("markdown_text", content)
-            print("audio_note", audio_note)
             content = validate_md_content(content, page_id, self.name, current_theme_file)
-            print("markdown_text_before_validation", content)
             if "silence.mp3" in audio_note:
-                #Check this
-     
-        
-
                 silence_path = os.path.abspath(os.path.join(os.path.dirname(__file__), audio_note))
-                print("silence_path_before", silence_path)
-                if exists(silence_path):
-                    print("silence_path", silence_path)
                 audio_note = silence_path
-                print("audionote validate", audio_note)
             else:
-               # markdown_text_validate += validate_narration(settings.tts_components, audio_note, settings.root_folder, page_id, section_file_name)
-                print("hello")
+                audio_note = validate_narration(settings.tts_components, audio_note, page_id, self.name)
+                print("audio_note", audio_note)
           #  if settings.trailer_mode:
            #     break
            # markdown_text_validate += "\n\n---\n\n"
