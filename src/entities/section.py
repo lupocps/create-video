@@ -13,7 +13,7 @@ from src.lupo.compiler_lupo import validate_md_content
 from src.lupo.compiler_lupo import validate_narration
 from src.lupo.compiler_lupo import extract_content_audio_compiler
 from src.entities.settings import Settings
-#from page import Page
+from src.entities.page import Page
 
 
 class Section:
@@ -80,12 +80,9 @@ class Section:
             else:
                 audio_note = validate_narration(settings.tts_components, audio_note, page_id, self.name)
                 print("audio_note before validate narration", audio_note)
-          #  if settings.trailer_mode:
-           #     break
-           # markdown_text_validate += "\n\n---\n\n"
-           # page_id += 1
-            #page = Page(id=page_id, marp_header=f"---\n{markdown_slides[0]}\n---\n", markdown_text=markdown_text,
-           #             audio_notes=audio_note, section_directory=self.output_directory, settings=settings)
 
+                page = Page(page_id=page_id, marp_header=f"---\n{markdown_slides[0]}\n---\n", markdown_text=markdown_text,
+                        audio_notes=audio_note, settings=settings)
 
+                page_id += 1
     

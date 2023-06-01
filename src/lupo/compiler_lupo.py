@@ -544,7 +544,6 @@ def replace_characters(audio_notes: str) -> str:
         # reusing function to fill the dictionary
         invalid_dict = phonemes_dict(characters_file)
         audio_notes = replace(audio_notes, invalid_dict)
-        print("audio_notes after replace", audio_notes)
         return audio_notes
     else:
         log("The file replace.txt not find or does not have anything in the root folder", "warning")
@@ -585,7 +584,6 @@ def validate_phonemes(audio_notes: str, ) -> str:
     '''
     phoneme_dict = {}
     phoneme_known_dict = {}
-    print("audio_notes began", audio_notes)
     phonemes_file = "./phonemes.txt"
     if exists(phonemes_file) and getsize(phonemes_file) > 0:
         phoneme_dict = phonemes_dict(phonemes_file)
