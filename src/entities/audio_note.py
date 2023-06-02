@@ -41,7 +41,7 @@ class AudioNote:
             self.hours = float(times[-3]) if len(times) >= 3 else 0
 
         output_audio_path = generate_audio(self.text, rectify_voice_speaker(tts_components.voice_speaker),
-                       tts_components.speed, tts_components.pitch, style,)
+                                                style, tts_components.speed, tts_components.pitch )
 
        
         self.output_path = output_audio_path
