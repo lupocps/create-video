@@ -15,7 +15,7 @@ ENDPOINT_USER = "https://lupo.ai/api/ProjectRuns"
 
 
 #ENDPOINT SERVER LUPO, TEMPORAL
-ENDPOINT_LUPO = "http://20.55.24.28:5000/api"
+ENDPOINT_LUPO = "http://172.171.248.83:5000/api"
 
 
 RED = '\033[91m'
