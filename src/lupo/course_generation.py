@@ -3,7 +3,6 @@
 from os.path import basename
 from src.utils import log
 from src.utils import upload_file_to_azure_blob_storage
-from src.lupo.azure import generate_captions
 from src.entities.settings import Settings
 
 
