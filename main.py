@@ -52,7 +52,7 @@ def main():
     with open("./app.log", "r", encoding='utf-8') as file:
         my_output = file.read()
     
-    print(my_output)
+    print("MY OUTPUT", my_output)
 
     toc_output = f"toc {toc}"
     with open(environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as file:
