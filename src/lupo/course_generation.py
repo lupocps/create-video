@@ -28,7 +28,7 @@ def generate_course(chapters:list, settings:Settings, azure_folder:str, course_d
         for section in chapter.sections:
             video = section.generate_video()
             video_azure_link = upload_file_to_azure_blob_storage("courses", video,
-                blob_name=f"{azure_folder}/{chapter.id}-{chapter.name}/{section.name}-{section.id}.mp4")
+                blob_name=f"{azure_folder}/{chapter.chapter_id}-{chapter.name}/{section.name}-{section.section_id}.mp4")
             if settings.trailer_mode:
                 settings.mail.set_video(video_azure_link, chapter.name, f"{section.tts_components.voice_speaker}/{section.name}")
             else:
