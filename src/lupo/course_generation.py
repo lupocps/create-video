@@ -24,7 +24,7 @@ def generate_course(chapters:list, settings:Settings, azure_folder:str, course_d
             "Name": chapter.name,
             "Sections": []
         }
-
+        print("enter generate_course")
         for section in chapter.sections:
             video = section.generate_video()
           #  video_azure_link = upload_file_to_azure_blob_storage("courses", video,

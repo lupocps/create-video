@@ -88,7 +88,7 @@ class Section:
             Return:
                 str: Path of the video generated
         '''
-
+        print("enter generate video")
         for page in self.pages:
           #  page.generate_path()
             audio_notes = page.generate_audio_notes(self.tts_components)

@@ -45,7 +45,7 @@ class Page:
                 list : AudioNote objects array
         '''
   
-        
+        print("enter generate audio ntoes")
         audio_notes = [] 
         if 'https://mlgstorageaccount.blob.core.windows.net/docs/media/silence.mp3' in self.audio_notes:
             return self.audio_notes
