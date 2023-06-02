@@ -418,16 +418,16 @@ def extract_content_audio_compiler(markdown_page: str, page_id, section_file_nam
     if result is None:  # NO audio TAG
         log(
             f"The are not a narration tag in {section_file_name} in the slide number {page_id}. Silence was added as narration", "warning")
-        return markdown_page, "../../utils/silence.mp3"
+        return markdown_page, "https://mlgstorageaccount.blob.core.windows.net/docs/media/silence.mp3"
     audio_note = result.group(3).strip()
     markdown_text = result.group(1).strip()
     if audio_note == '':  # AUDIO TAG EMPTY
         log(f"The are a narration empty in {section_file_name} in the slide number {page_id}. Silence was added as narration", "warning")
-        return markdown_text, "../../utils/silence.mp3" #CHANGE
+        return markdown_text, "https://mlgstorageaccount.blob.core.windows.net/docs/media/silence.mp3" #CHANGE
     if audio_note.startswith(MARP_DIRECTIVES):  # AUDIOTAG WITH MARP DIRECTIVES
         log(
             f"The narration in {section_file_name}, slide number {page_id}, should not include a marp directive, or it is recommended to always have narration instead. Silence was added as narration", "warning")
-        return markdown_page, "../../utils/silence.mp3"
+        return markdown_page, "https://mlgstorageaccount.blob.core.windows.net/docs/media/silence.mp3"
     return markdown_text, audio_note
 
 

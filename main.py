@@ -5,7 +5,7 @@ from os import environ
 
 #from src.lupo.user_verification import user_verification
 from src.lupo.compiler_lupo import validate_yaml_file_details
-
+from src.lupo.course_generation import generate_course
 from src.utils import read_toc
 from src.utils import log
 from src.entities.course import Course
@@ -40,10 +40,13 @@ def main():
     azure_folder = f"{settings.course_name}/{settings.course_version}/{settings.course_uuid}"
 
 
+    course_data = {
+        "Chapters" : []
+    }
 
 
 
-
+    course_data = generate_course(course.chapters, settings, azure_folder, course_data)
 
 
 
