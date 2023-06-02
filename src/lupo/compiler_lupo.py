@@ -672,7 +672,6 @@ def validate_time(time: str, page_id: int, section_file_name: str):
     Parameters:
         time (str): The time of the audio
     '''
-    print("time", time)
     if time is None:
         return False
     pattern = r"\(\((\d+(?:,\s*\d+)*)\)\)"

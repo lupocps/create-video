@@ -49,13 +49,11 @@ class Section:
             self.tts_components = settings.tts_components
 
 
-        print("markdown_file", markdown_file)
         if not exists(markdown_file):
             log(f"Check the toc file, the file {markdown_file} does not exists", "error")
 
 
         markdown_absolute_path = dirname(markdown_file).replace("\\", "/")
-        print("markdown_absolute_path", markdown_absolute_path)
 
 
         # Open and Read the markdown content
@@ -63,14 +61,12 @@ class Section:
             markdown_text = file.read()
 
             markdown_text = fix_relative_paths(markdown_text, markdown_absolute_path, settings.course_name) # Problem
-           # print("The text is", markdown_text)
         
         markdown_slides = [slide for slide in re.split(r"\-\-\-\s?\n", markdown_text) if slide.strip() != '']
 
         markdown_header = markdown_slides[0]
 
         markdown_header, current_theme_file = validate_header(markdown_header, settings.themes, self.name)
-        print("markdown_header_new", markdown_header)
 
 
         page_id = 1
@@ -82,7 +78,6 @@ class Section:
                 audio_note = silence_path
             else:
                 audio_note = validate_narration(settings.tts_components, audio_note, page_id, self.name)
-                print("audio_note before validate narration", audio_note)
 
                 page = Page(page_id=page_id, marp_header=f"---\n{markdown_slides[0]}\n---\n", markdown_text=markdown_text,
                         audio_notes=audio_note, settings=settings)
