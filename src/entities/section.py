@@ -80,7 +80,9 @@ class Section:
                         audio_notes=audio_note, settings=settings)
             page_id += 1
     
+            page.source_md = markdown_absolute_path
 
+            self.pages.append(page)
 
     def generate_video(self) -> str:
         '''Generate a video with the content of all the pages of the section.
