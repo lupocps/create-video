@@ -39,15 +39,8 @@ def validate_yaml_file_details(yaml_dict: str):
     course_name = yaml_dict['name'] if 'name' in yaml_dict else ''
     course_version = yaml_dict['version'] if 'version' in yaml_dict else ''
     course_speaker = yaml_dict['speaker'] if 'speaker' in yaml_dict else ''
+    course_captions = yaml_dict['captions'] if 'captions' in yaml_dict else False
     trailer_mode = yaml_dict['trailer'] if 'trailer' in yaml_dict else False
-
-    # TODO:
-    speakers = course_speaker.split(",")
-    if len(speakers) > 1:
-        speakers = [speaker.strip() for speaker in speakers]
-        # TODO: delete duplicates
-        if not trailer_mode:
-            course_speaker = speakers[0]
 
     # CHECK DETAILS
     if course_name == '':
@@ -81,13 +74,31 @@ def validate_yaml_file_details(yaml_dict: str):
         log("The '.vscode/settings.json' file does not exist. Unable to generate themes.", 'warning')
 
     # Validate attributes
-    # SPEAKER AFTER CHECK MD FILE
     course_name = slugify(course_name)
     course_version = slugify(course_version)
 
-    languages_to_translate = validate_languages(languages_to_translate)
+    if course_captions:
+        languages_to_translate = validate_languages(languages_to_translate)
 
-    course_speaker = course_speaker.capitalize()
+    if trailer_mode:
+        tts_components = []
+        speakers = course_speaker.split(",")
+        speakers = list(set(speakers)) # delete duplicates
+        for speaker in speakers:
+            course_speaker = speaker.strip().capitalize()
+            if not has_style_in_lupo(style_speaker, course_speaker):
+                style_speaker = "default"
+            tts_components.append(TTSComponents(
+                                        course_speaker, 
+                                        rectify_speed(audio_speed), 
+                                        rectify_pitch(audio_pitch), 
+                                        style_speaker))
+    else:
+        if course_speaker == '':
+            log("The yaml file has no 'speaker' key.", 'warning')
+            course_speaker = 'Aria'
+        else:
+            course_speaker = course_speaker.capitalize()
     if not has_style_in_lupo(style_speaker, course_speaker):
         style_speaker = "default"
 
@@ -275,14 +286,18 @@ def fix_relative_paths(markdown_text: str, markdown_absolute_path: str, course_n
         # WITH ' for footer in content
         r"'!\[(.*)\]\((?!(http|https)://)(.*)\)'",
         r"(backgroundImage):\s*url\((?!(http|https)://)(.*)\)",
-        r"<video(.*)src=[\"'](?!(http|https)://)(.*)[\"'](.*)>"
+        r"<video(.*)src=[\"'](?!(http|https)://)(.*)[\"'](.*)>",
+        r'<img[^>]*src=(?!(?:http|https):)["\']?(.*?)["\']?(?:\s|>)' #image HTML
     ]
 
     for regex in regex_list:
         matches = re.finditer(regex, markdown_text, re.MULTILINE)
         for match in matches:
+            if '<img[^>]*src=' in regex:
+                 filename = match.group(1)
+            else:
+                filename = match.group(3)
           #  print("The match is:", match.group(3))
-            filename = match.group(3)
             if "../" in filename:  # If not are in the same folder as the md
               #  print("the file name in the if is", filename)
                 filename_temp = filename.replace("../", "")
@@ -340,11 +355,9 @@ def validate_header(markdown_header: str, themes: str, section_name: str) -> lis
         log(
             f"The marp directive in the section {section_name} is not found", "error")
     else:
-        print("marp check")
         header_validated += directives[0] + "\n"
     for directive in directives[1:]:
         if directive.startswith("theme: "):
-            print("check theme")
             current_theme = validate_theme_file(
                 directive, themes, section_name)
             header_validated += directive + "\n"
@@ -404,16 +417,16 @@ def extract_content_audio_compiler(markdown_page: str, page_id, section_file_nam
 
     if result is None:  # NO audio TAG
         log(
-            f"The are not a narration tag in {section_file_name} in the slide number {page_id}", "warning")
+            f"The are not a narration tag in {section_file_name} in the slide number {page_id}. Silence was added as narration", "warning")
         return markdown_page, "../../utils/silence.mp3"
     audio_note = result.group(3).strip()
     markdown_text = result.group(1).strip()
     if audio_note == '':  # AUDIO TAG EMPTY
-        log(f"The are a narration empty in {section_file_name} in the slide number {page_id}", "warning")
+        log(f"The are a narration empty in {section_file_name} in the slide number {page_id}. Silence was added as narration", "warning")
         return markdown_text, "../../utils/silence.mp3" #CHANGE
     if audio_note.startswith(MARP_DIRECTIVES):  # AUDIOTAG WITH MARP DIRECTIVES
         log(
-            f"The narration cannot have marp directive in {section_file_name} in the slide number {page_id}", "warning")
+            f"The narration in {section_file_name}, slide number {page_id}, should not include a marp directive, or it is recommended to always have narration instead. Silence was added as narration", "warning")
         return markdown_page, "../../utils/silence.mp3"
     return markdown_text, audio_note
 
@@ -464,7 +477,6 @@ def validate_narration(tts_components: TTSComponents, audio_note: str, page_id: 
 
     audio_note = replace_characters(audio_note)
     audio_note = validate_phonemes(audio_note)
-    print("audio_note before validate phonemes", audio_note)
     has_time = re.search(
         r'^\(\(', audio_note, re.MULTILINE)  # Has time
 

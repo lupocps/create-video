@@ -12,12 +12,11 @@ class Settings:
 
     '''
 
-    def __init__(self, yaml_dict, course_name, course_version,tts_components ,languages_to_translate, themes, trailer_mode):
+    def __init__(self, yaml_dict, course_name, course_version, tts_components ,languages_to_translate, themes, trailer_mode):
         '''The constructor for Settings class.
 
             Parameters:
              
-    
         '''
      #   self.root_folder = root_folder
         self.course_name = course_name
@@ -27,18 +26,18 @@ class Settings:
         self.tts_components = tts_components
         self.languages_to_translate = languages_to_translate
 
-        self.generate_captions = (
-            'captions' in self.yaml_dict) and self.yaml_dict['captions'] is True
-        self.generate_transcript = (
-            'transcript' in self.yaml_dict) and self.yaml_dict['transcript'] is True
-        self.generate_slides = (
-            'slides' in self.yaml_dict) and self.yaml_dict['slides'] is True
-        self.generate_logs = (
-            'logs' in self.yaml_dict) and self.yaml_dict['logs'] is True
-        self.clean_files = (
-            'clean' in self.yaml_dict) and self.yaml_dict['clean'] is True
-        self.stop_on_warning = (
-            'stop' in self.yaml_dict) and self.yaml_dict['stop'] is True
+        if self.trailer_mode:
+            self.generate_captions = False
+            self.generate_transcript = False
+            self.generate_slides = False
+        else:
+            self.generate_captions = ('captions' in self.yaml_dict) and (self.yaml_dict['captions'] is True)
+            self.generate_transcript = ('transcript' in self.yaml_dict) and (self.yaml_dict['transcript'] is True)
+            self.generate_slides = ('slides' in self.yaml_dict) and (self.yaml_dict['slides'] is True)
+        
+        self.generate_logs = self.yaml_dict['logs'] if 'logs' in yaml_dict else True 
+        self.clean_files = ('clean' in self.yaml_dict) and (self.yaml_dict['clean'] is True)
+        self.stop_on_warning = ('stop' in self.yaml_dict) and (self.yaml_dict['stop'] is True)
 
         
         self.measure_timing = MeasureTiming()

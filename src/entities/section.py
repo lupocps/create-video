@@ -43,7 +43,10 @@ class Section:
 
         self.settings = settings
         self.markdown_file = f"./{markdown_file}"
-
+        if settings.trailer_mode:
+            self.tts_components = settings.tts_components[id-1]
+        else:
+            self.tts_components = settings.tts_components
 
 
         print("markdown_file", markdown_file)

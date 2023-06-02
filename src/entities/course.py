@@ -46,5 +46,4 @@ class Course:
                     log("The 'sections' or 'name' key is not found in one chapter", "error")
         else:
             log("The 'chapters' key is not found", "error")
-        print("chapters", self.chapters)
 

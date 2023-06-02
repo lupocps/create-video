@@ -41,8 +41,9 @@ def user_verification(is_final) -> dict:
         }
         return params_for_db
 
-    #TODO: More specific message
-    message_error = f'{github_actor} user validation did not complete successfully'
+    error_data = response.json()
+    message_error = error_data["error"]
     log(message_error, "error")
+    return None
 
     
