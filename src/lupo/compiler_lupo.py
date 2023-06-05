@@ -513,7 +513,7 @@ def validate_narration(tts_components: TTSComponents, audio_note: str, page_id: 
             else:
                 data.append({"style": style,
                             "text_audio_note": audio_note_result.group(3)})
-
+    print("data:", data)
     return data
 
 
