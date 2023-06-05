@@ -31,7 +31,6 @@ class AudioNote:
         self.text = text.strip()
         self.time = time
         
-        print("enter audionote class")
         if time is not None:
 
             times = time.split(',')
