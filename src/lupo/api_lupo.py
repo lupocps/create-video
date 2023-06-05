@@ -31,8 +31,11 @@ def generate_audio(
         return text
     body = {'text': text, 'speaker':speaker, 'style': style, 'speed': speed, 'pitch': pitch}
     print("body", body)
+    print("ENDPOINT_LUPO", ENDPOINT_LUPO+"/audios" )
+    print("HEADERS_LUPO", HEADERS_LUPO)
     response = requests.post(ENDPOINT_LUPO+"/audios", HEADERS_LUPO, json=body,timeout=20)
     print("status_code", response.status_code)
+    print("response", response.content )
     if response.status_code == 200:
         print("audio", audio)
         audio = response.json()
