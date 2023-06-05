@@ -33,8 +33,8 @@ class Page:
         self.audio_notes = audio_notes
         self.settings = settings
         self.source_md = "" 
-        markdown_source_notes = re.sub(r'<mstts:express-as style="[^"]*">(.*?)<\/mstts:express-as>', r'\1', audio_notes)
-        self.source_audio_notes = markdown_source_notes
+       # markdown_source_notes = re.sub(r'<mstts:express-as style="[^"]*">(.*?)<\/mstts:express-as>', r'\1', audio_notes)
+       # self.source_audio_notes = markdown_source_notes
 
 
 
