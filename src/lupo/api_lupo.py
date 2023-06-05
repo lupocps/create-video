@@ -29,11 +29,13 @@ def generate_audio(
     
     if text == "https://mlgstorageaccount.blob.core.windows.net/docs/media/silence.mp3":
         return text
-    body = {'text': text, 'speaker':speaker, 'style': style, 'speed': speed, 'pitch': pitch}
+    
+    body = {'text': text, 'speaker': speaker, 'style': style, 'speed': speed, 'pitch': pitch}
+
     print("body", body)
     print("ENDPOINT_LUPO", ENDPOINT_LUPO+"/audios" )
     print("HEADERS_LUPO", HEADERS_LUPO)
-    response = requests.post(ENDPOINT_LUPO+"/audios", HEADERS_LUPO, json=body,timeout=20)
+    response = requests.post(ENDPOINT_LUPO+"/audios", headers=HEADERS_LUPO, json=body,timeout=20)
     print("status_code", response.status_code)
     print("response", response.content )
     if response.status_code == 200:
