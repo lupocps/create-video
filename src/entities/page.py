@@ -59,11 +59,11 @@ class Page:
                     r'(\(\(([\d\., ]*)\)\))?(.*)', audio_dict["text_audio_note"])
 
                 audio_notes.append(
-                            AudioNote(text=audio_note_result.group(3), time=audio_note_result.group(2), tts_components=tts_components, style=audio_dict["text_audio_note"])
+                            AudioNote(text=audio_note_result.group(3), time=audio_note_result.group(2), tts_components=tts_components, style=audio_dict["style"])
                         )
             else:
                 audio_notes.append(
-                            AudioNote(text=audio_dict["text_audio_note"], time=None, tts_components=tts_components, style=audio_dict["text_audio_note"])
+                            AudioNote(text=audio_dict["text_audio_note"], time=None, tts_components=tts_components, style=audio_dict["style"])
                         )
 
         return audio_notes
