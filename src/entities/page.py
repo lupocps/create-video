@@ -45,34 +45,26 @@ class Page:
                 list : AudioNote objects array
         '''
   
-        print("enter generate audio ntoes")
+       
+        print("enter generate audio notes")
         audio_notes = [] 
         if 'https://mlgstorageaccount.blob.core.windows.net/docs/media/silence.mp3' in self.audio_notes:
             return self.audio_notes
 
-        regex_with_time = r'<mstts:express-as style=("([^"]+)")>\(\((\d+(?:,\s*\d+)*)\)\)\s*(.*?)<\/mstts:express-as>'
-        regex_no_time = r'<mstts:express-as style=("([^"]+)")>\s*(.*?)<\/mstts:express-as>'
-        has_time = re.search(
-            r'\(\(', self.audio_notes, re.MULTILINE)  # Has time
-        
-        if has_time:
-            for i, line in enumerate(self.audio_notes.split('\n')):
-                if len(line) > 1:
-                    audio_note_result_with_time = re.search(regex_with_time, line)
-                    if  audio_note_result_with_time is None:
-                        audio_note_result = re.search(regex_no_time, line)
-                        audio_notes.append(
-                            AudioNote(text=audio_note_result.group(3), time=None, tts_components=tts_components, style=audio_note_result.group(2))
+        for audio_dict in self.audio_notes:
+            has_time = re.search(
+            r'\(\(', audio_dict["text_audio_note"])
+            if has_time:
+                audio_note_result = re.search(
+                    r'(\(\(([\d\., ]*)\)\))?(.*)', audio_dict["text_audio_note"])
+
+                audio_notes.append(
+                            AudioNote(text=audio_note_result.group(3), time=audio_note_result.group(2), tts_components=tts_components, style=audio_dict["text_audio_note"])
                         )
-                    else:
-        
-                        audio_notes.append(
-                            AudioNote(text=audio_note_result_with_time.group(4), time=audio_note_result_with_time.group(3), tts_components=tts_components, style=audio_note_result_with_time.group(2))
+            else:
+                audio_notes.append(
+                            AudioNote(text=audio_dict["text_audio_note"], time=None, tts_components=tts_components, style=audio_dict["text_audio_note"])
                         )
-        else:
-            audio_notes.append(
-                AudioNote(text=self.audio_notes, time=None,
-                        tts_components=tts_components, style="default")
-            )
 
         return audio_notes
+

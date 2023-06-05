@@ -14,7 +14,6 @@ HEADERS_LUPO = {'Content-Type': 'application/json',
 ENDPOINT_USER = "https://lupo.ai/api/ProjectRuns"
 
 
-#ENDPOINT SERVER LUPO, TEMPORAL
 ENDPOINT_LUPO = "http://172.171.248.83:5000/api"
 
 

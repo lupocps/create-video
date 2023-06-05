@@ -472,67 +472,49 @@ def validate_narration(tts_components: TTSComponents, audio_note: str, page_id: 
     Return:
         (str):
     '''
-    regex_style = r'\[\[(.*)\]\]\s*(.*)'
-    regex_text = r'^(?!\[\[).+$'
+
 
     audio_note = replace_characters(audio_note)
     audio_note = validate_phonemes(audio_note)
-    has_time = re.search(
-        r'^\(\(', audio_note, re.MULTILINE)  # Has time
-
-    text_audio_notes = ""
-    if has_time:
-        for i, line in enumerate(audio_note.split('\n')):
-            if len(line) > 1:  # avoid empty lines
-                audio_note_result = re.search(
-                    r'(\(\(([\d\., ]*)\)\)\s)*(.*)', line)
-                has_style_in_audio_note = re.search(
-                    regex_style, audio_note_result.group(3))  # style
-
-                validate_time(audio_note_result.group(1),
-                              page_id, section_file_name)
-
-                if has_style_in_audio_note:
-                    time_with_style = has_style_in_audio_note.group(1).strip()
-                    text_line = f"[[{time_with_style}]] {audio_note_result.group(1)} {has_style_in_audio_note.group(2)}"
-
-                    if has_style_in_lupo(has_style_in_audio_note.group(  # CHECK
-                            1), tts_components.voice_speaker):  # exist style
-                        text_audio_notes_line = re.sub(
-                            regex_style, '<mstts:express-as style="\\g<1>">\\g<2></mstts:express-as>', text_line)
-                    else:
-                        if has_style_in_lupo(tts_components.course_style, tts_components.voice_speaker):
-                            text_audio_notes_line = re.sub(
-                                regex_style, f'<mstts:express-as style="{tts_components.course_style}">\\g<2></mstts:express-as>', text_line, flags=re.M)
-
-                        else:
-                            text_audio_notes_line = re.sub(
-                                regex_style, '<mstts:express-as style="default">\\g<2></mstts:express-as>', text_line, flags=re.M)
-                else:
-                    if has_style_in_lupo(tts_components.course_style, tts_components.voice_speaker):
-                        text_audio_notes_line = re.sub(
-                            regex_text, f'<mstts:express-as style="{tts_components.course_style}">\\g<0></mstts:express-as>', line, flags=re.M)
-
-                    else:
-                        text_audio_notes_line = re.sub(
-                            regex_text, '<mstts:express-as style="default">\\g<0></mstts:express-as>', line, flags=re.M)
-
-                text_audio_notes += text_audio_notes_line + "\n"
-    else:
-        if has_style_in_lupo(tts_components.course_style, tts_components.voice_speaker):
-            text_audio_notes = re.sub(
-                regex_text, f'<mstts:express-as style="{tts_components.course_style}">\\g<0></mstts:express-as>', audio_note, flags=re.M)
-
-            text_audio_notes = re.sub(
-                regex_style, '<mstts:express-as style="\\g<1>">\\g<2></mstts:express-as>',  text_audio_notes)
-
+    
+    regex_style = r'\[\[(.*)\]\]\s*(.*)'
+    data = []
+    audio_lines = [line.strip() for line in audio_note.split('\n') if line.strip() != '']
+    for line in audio_lines:
+        has_style_in_line = re.search(
+                    regex_style, line)
+        if has_style_in_line:
+            style = has_style_in_line.group(1)
+        elif tts_components.course_style != "default":
+            style = tts_components.course_style
         else:
-            # HOW CHECK IF ARE SOME  STYLES THAT NOT EXIST ###########
-            text_audio_notes = re.sub(
-                regex_text, '<mstts:express-as style="default">\\g<0></mstts:express-as>', audio_note, flags=re.M)
-            text_audio_notes = re.sub(
-                regex_style, '<mstts:express-as style="\\g<1>">\\g<2></mstts:express-as>',  text_audio_notes)
-    return text_audio_notes
+            style = "default"
+        if not has_style_in_lupo(style, tts_components.voice_speaker):
+            style = "default"
+
+
+        has_time = re.search(r'^\(\(', line)
+        audio_note_result = re.search(
+                    r'(\(\(([\d\., ]*)\)\))?(.*)', line)
+        if has_time:
+            
+            time = validate_time(audio_note_result.group(1), page_id, section_file_name)
+            if not time is None:
+                if has_style_in_line:
+                    text_audio_note = f"(({time})) {has_style_in_line.group(2)}"
+                else:
+                    text_audio_note = f"(({time})) {audio_note_result.group(2)}"
+                data.append({"style": style,
+                            "text_audio_note": text_audio_note})
+        else:
+            if has_style_in_line:
+                data.append({"style": style,
+                            "text_audio_note": has_style_in_line.group(2)})      
+            else:
+                data.append({"style": style,
+                            "text_audio_note": audio_note_result.group(3)})
+    print("data:", data)
+    return data
 
 
 def replace_characters(audio_notes: str) -> str:

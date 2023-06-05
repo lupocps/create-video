@@ -74,15 +74,16 @@ class Section:
             content, audio_note = extract_content_audio_compiler(page, page_id, self.name)
             content = validate_md_content(content, page_id, self.name, current_theme_file)
             if "https://mlgstorageaccount.blob.core.windows.net/docs/media/silence.mp3" != audio_note:
-                audio_note = validate_narration(settings.tts_components, audio_note, page_id, self.name)
+                audio_notes = validate_narration(settings.tts_components, audio_note, page_id, self.name)
 
             page = Page(page_id=page_id, marp_header=f"---\n{markdown_slides[0]}\n---\n", markdown_text=markdown_text,
-                        audio_notes=audio_note, settings=settings)
+                        audio_notes=audio_notes, settings=settings)
             page_id += 1
     
             page.source_md = markdown_absolute_path
 
             self.pages.append(page)
+
 
     def generate_video(self) -> str:
         '''Generate a video with the content of all the pages of the section.

@@ -26,6 +26,7 @@ def generate_audio(
     Returns:
         str: path of the generated audio file
     '''
+    
     if text == "https://mlgstorageaccount.blob.core.windows.net/docs/media/silence.mp3":
         return text
     body = [{'text': text, 'speaker':speaker, 'style': style, 'speed': speed, 'pitch': pitch}]

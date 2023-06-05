@@ -45,7 +45,6 @@ def main():
     }
 
 
-
     course_data = generate_course(course.chapters, settings, azure_folder, course_data)
 
 
