@@ -211,8 +211,11 @@ def rectify_voice_speaker(voice_speaker: str) -> str:
         log("Problem with connecting to the API ", "warning")
     for language, speakers in speakers_lupo.items():
         print("language", language)
-        print("language", speakers)
+        print("speakers", speakers)
+        print("speakers_lupo.items", speakers_lupo.items())
         if voice_speaker in speakers:
+            print("enter")
+            print(f"{language}-{voice_speaker}Neural")
             return f"{language}-{voice_speaker}Neural"
 
     log('The voice speaker does not exist', 'warning')
