@@ -36,6 +36,7 @@ def generate_audio(
 
     if response.status_code == 200:
         audio = response.json()
+        audio = audio['audio_url']
         print("audio", audio)
     else:
         log("Problem with connecting to the API ", "warning")
