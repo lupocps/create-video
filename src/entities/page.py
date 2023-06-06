@@ -81,7 +81,7 @@ class Page:
         else:
             markdown_text = f"---\n{self.marp_header}\n---\n\n{self.markdown_text}"
             theme_file = self.get_current_theme(self.settings.themes)
-            print("theme_file")
+            print("theme_file",theme_file )
             with open(theme_file, 'r', encoding='utf-8') as file:
                 theme = file.read()
             print("theme", theme)
