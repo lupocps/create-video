@@ -104,7 +104,7 @@ class Page:
         for directive in directives[1:]: #0 is marp: true
             if directive.startswith("theme: "):
                 substring = "theme:"
-                current_theme = current_theme.split(substring, 1)[-1].strip()
+                current_theme = directive.split(substring, 1)[-1].strip()
                 current_theme_file = f"{current_theme}.css"
                 for theme in themes:
                     theme_name = basename(theme)
