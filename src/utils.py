@@ -11,8 +11,8 @@ HEADERS_LUPO = {'Content-Type': 'application/json',
             'Accept-Encoding': 'gzip, deflate, br'}
 
 
-
-ENDPOINT_LUPO = os.environ["ENDPOINT_LUPO"]
+#TEMP ENDPOINT
+ENDPOINT_LUPO = "http://20.55.24.28:5000/api/"
 
 RED = '\033[91m'
 GREEN = '\033[92m'
