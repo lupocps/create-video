@@ -32,6 +32,7 @@ class Page:
         '''
         self.page_id = page_id
         self.marp_header = marp_header
+        print("header page",  self.marp_header)
         self.markdown_text = markdown_text
         self.audio_notes = audio_notes
         self.settings = settings
