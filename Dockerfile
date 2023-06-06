@@ -21,7 +21,9 @@ FROM gcr.io/distroless/python3-debian10
 COPY --from=builder /app /app
 WORKDIR /app
 ENV PYTHONPATH /app
+
 # Pass the repository secret as an environment variable
 ENV LUPO_CORE_AZURE_STORAGE_CONNECTION_STRING=${LUPO_CORE_AZURE_STORAGE_CONNECTION_STRING}
+ENV ENDPOINT_LUPO=${ENDPOINT_LUPO}
 
 CMD ["/app/main.py"]

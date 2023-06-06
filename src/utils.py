@@ -12,10 +12,8 @@ HEADERS_LUPO = {'Content-Type': 'application/json',
 
 
 
-#ENDPOINT_LUPO = os.environ["ENDPOINT_LUPO"]
-ENDPOINT_LUPO = ""
-connection_string = os.environ["LUPO_CORE_AZURE_STORAGE_CONNECTION_STRING"]
-print(connection_string)
+ENDPOINT_LUPO = os.environ["ENDPOINT_LUPO"]
+
 RED = '\033[91m'
 GREEN = '\033[92m'
 YELLOW = '\033[93m'
