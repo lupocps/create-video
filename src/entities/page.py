@@ -81,8 +81,10 @@ class Page:
         else:
             markdown_text = f"---\n{self.marp_header}\n---\n\n{self.markdown_text}"
             theme_file = self.get_current_theme(self.settings.themes)
+            print("theme_file")
             with open(theme_file, 'r', encoding='utf-8') as file:
                 theme = file.read()
+            print("theme", theme)
             image = generate_image(markdown_text, theme)
             return image
 
@@ -101,20 +103,13 @@ class Page:
         '''
         directives = self.marp_header.split("\n")
         directives = list(filter(lambda item: item != '', directives))
-        print("directives", directives)
         for directive in directives[1:]: #0 is marp: true
             if directive.startswith("theme: "):
-                print("enter if with", directive)
                 substring = "theme:"
                 current_theme = directive.split(substring, 1)[-1].strip()
                 current_theme_file = f"{current_theme}.css"
-                print("current?theme", current_theme_file)
-                print("themes list", themes)
                 for theme in themes.split(' '):
                     theme_name = basename(theme)
-                    print("theme name", theme_name)
-                    print("current_theme_file", current_theme_file)
-                    print("theme", theme)
                     if current_theme_file == theme_name:
                         if exists(theme):
                             
