@@ -92,6 +92,7 @@ class Section:
         for page in self.pages:
           #  page.generate_path()
             audio_notes = page.generate_audio_notes(self.tts_components)
-            image = page.generate_image()
+            source = page.generate_source()
+            video = page.generate_video(audio_notes, source)
             #video_only_file = page.generate_video()
  

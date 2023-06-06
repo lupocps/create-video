@@ -58,3 +58,17 @@ def generate_image(markdown_text, theme):
         #BLANK or WITH MESSAGE IMAGE?
     return image
 
+
+def generate_video(source, source_type, audio_notes, draft):
+    body = {'source': source, 'source_type': source_type , 'audio': audio_notes, 'draft': draft, 'is_console_application': True}
+    print("body", body)
+    print("audionotes",audio_notes )
+    response = requests.post(ENDPOINT_LUPO+"/videos", headers=HEADERS_LUPO, json=body,timeout=20)
+    if response.status_code == 200:
+        video = response.json()
+        video = video['video_url']
+        print("video", video)
+    else:
+        log("Problem with connecting to the API ", "warning")
+        
+    return video

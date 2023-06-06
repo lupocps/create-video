@@ -5,6 +5,7 @@ from src.entities.settings import Settings
 from src.entities.tts_components import TTSComponents
 from src.entities.audio_note import AudioNote
 from src.lupo.api_lupo import generate_image
+from src.lupo.api_lupo import generate_video
 from os.path import exists 
 from os.path import basename 
 
@@ -32,7 +33,6 @@ class Page:
         '''
         self.page_id = page_id
         self.marp_header = marp_header
-        print("header page",  self.marp_header)
         self.markdown_text = markdown_text
         self.audio_notes = audio_notes
         self.settings = settings
@@ -72,7 +72,7 @@ class Page:
         return audio_notes
 
     
-    def generate_image(self):
+    def generate_source(self):
         if ".mp4" in self.markdown_text:
             if "```" in self.markdown_text:  # patch
                 pass
@@ -82,11 +82,21 @@ class Page:
         else:
             markdown_text = f"---\n{self.marp_header}\n---\n\n{self.markdown_text}"
             theme_file = self.get_current_theme(self.settings.themes)
-            print(markdown_text)
             with open(theme_file, 'r', encoding='utf-8') as file:
                 theme = file.read()
             image = generate_image(markdown_text, theme)
             return image
+
+
+
+    def generate_video(self, source, audio_notes):
+        if not "silence.mp3" in audio_notes:
+            if "mp4" in source:
+                source_type = "video"
+            else:
+                source_type = "image"
+            audio = generate_video(source, source_type, audio_notes, not self.settings.final)
+
 
 
     def get_resource_video(self):
