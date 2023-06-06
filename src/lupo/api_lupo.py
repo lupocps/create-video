@@ -44,3 +44,17 @@ def generate_audio(
 
     return audio
 
+
+def generate_image(markdown_text, theme):
+    body = {'markdown':markdown_text, 'style' : theme}
+    response = requests.post(ENDPOINT_LUPO+"/images", headers=HEADERS_LUPO, json=body,timeout=20)
+
+    if response.status_code == 200:
+        image = response.json()
+        image = image['image_url']
+        print("image", image)
+    else:
+        log("Problem with connecting to the API ", "warning")
+        #BLANK or WITH MESSAGE IMAGE?
+    return image
+

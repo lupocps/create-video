@@ -71,8 +71,10 @@ class Section:
 
         page_id = 1
         for page in markdown_slides[1:]:
+
             content, audio_note = extract_content_audio_compiler(page, page_id, self.name)
             content = validate_md_content(content, page_id, self.name, current_theme_file)
+
             if "https://mlgstorageaccount.blob.core.windows.net/docs/media/silence.mp3" != audio_note:
                 audio_notes = validate_narration(settings.tts_components, audio_note, page_id, self.name)
 
@@ -94,5 +96,6 @@ class Section:
         for page in self.pages:
           #  page.generate_path()
             audio_notes = page.generate_audio_notes(self.tts_components)
-           # video_only_file = page.generate_video()
+            image = page.generate_image()
+            #video_only_file = page.generate_video()
  

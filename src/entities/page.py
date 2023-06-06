@@ -4,6 +4,9 @@ import re
 from src.entities.settings import Settings
 from src.entities.tts_components import TTSComponents
 from src.entities.audio_note import AudioNote
+from src.lupo.api_lupo import generate_image
+from os.path import exists 
+from os.path import basename 
 
 class Page:
     '''This class contains all the content and audio notes of the page
@@ -67,3 +70,45 @@ class Page:
 
         return audio_notes
 
+    
+    def generate_image(self):
+        if ".mp4" in self.markdown_text:
+            if "```" in self.markdown_text:  # patch
+                pass
+            else:
+                result = self.get_resource_video()
+                return result
+        else:
+            markdown_text = f"---\n{self.marp_header}\n---\n\n{self.markdown_text}"
+            theme_file = self.get_current_theme(self.settings.themes)
+            with open(theme_file, 'r', encoding='utf-9') as file:
+                theme = file.read()
+            image = generate_image(markdown_text, theme)
+            return image
+
+
+    def get_resource_video(self):
+        '''Get the resource video of the page
+        '''
+        regex = r"<video.*src=[\"'](.*)[\"']"
+        result = re.search(regex, self.markdown_text)
+        result = result.group(1) if result else " "
+        return result
+
+
+    def get_current_theme(self, themes):
+        '''Get the file of the theme
+        '''
+        directives = self.marp_header.split("\n")
+        directives = list(filter(lambda item: item != '', directives))
+        for directive in directives[1:]: #0 is marp: true
+            if directive.startswith("theme: "):
+                substring = "theme:"
+                current_theme = current_theme.split(substring, 1)[-1].strip()
+                current_theme_file = f"{current_theme}.css"
+                for theme in themes:
+                    theme_name = basename(theme)
+                    if current_theme_file == theme_name:
+                        if exists(theme):
+                            return theme
+        return ''
