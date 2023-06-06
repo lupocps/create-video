@@ -7,8 +7,6 @@ inputs:
 outputs:
   myOutput:
     description: "Output from the action"
-env:
-    LUPO_CORE_AZURE_STORAGE_CONNECTION_STRING: ${{ secrets.LUPO_CORE_AZURE_STORAGE_CONNECTION_STRING }}
 runs:
   using: 'docker'
   image: 'Dockerfile'
