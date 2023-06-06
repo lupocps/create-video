@@ -12,7 +12,7 @@ HEADERS_LUPO = {'Content-Type': 'application/json',
 
 
 
-ENDPOINT_LUPO = os.environ(["ENDPOINT_LUPO"])
+ENDPOINT_LUPO = os.environ["ENDPOINT_LUPO"]
 
 RED = '\033[91m'
 GREEN = '\033[92m'
