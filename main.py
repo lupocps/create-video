@@ -14,7 +14,8 @@ def main():
     ''' Main method '''
 
     toc = environ["INPUT_TOC"]
-    
+    c =  environ["LUPO_CORE_AZURE_STORAGE_CONNECTION_STRING"]
+    print(c)
 
     # read toc
     if toc:
