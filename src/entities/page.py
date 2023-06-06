@@ -97,24 +97,26 @@ class Page:
 
 
     def get_current_theme(self, themes):
-        '''Get the file of the theme
-        '''
-        print("self.marp_header", self.marp_header)
-        directives = self.marp_header.split("\n")
-        directives = list(filter(lambda item: item != '', directives))
-        print("directives", directives)
-        for directive in directives[1:]: #0 is marp: true
-            if directive.startswith("theme: "):
-                print("enter if with", directive)
-                substring = "theme:"
-                current_theme = directive.split(substring, 1)[-1].strip()
-                current_theme_file = f"{current_theme}.css"
-                print("current?theme", current_theme_file)
-                print("themes list", themes)
-                for theme in themes.split(' '):
-                    theme_name = basename(theme)
-                    print("theme name", theme_name)
-                    if current_theme_file == theme_name:
-                        if exists(theme):
-                            return theme
+    '''Get the file of the theme
+    '''
+    directives = self.marp_header.split("\n")
+    directives = list(filter(lambda item: item != '', directives))
+    print("directives", directives)
+    for directive in directives[1:]: #0 is marp: true
+        if directive.startswith("theme: "):
+            print("enter if with", directive)
+            substring = "theme:"
+            current_theme = directive.split(substring, 1)[-1].strip()
+            current_theme_file = f"{current_theme}.css"
+            print("current?theme", current_theme_file)
+            print("themes list", themes)
+            for theme in themes.split(' '):
+                theme_name = basename(theme)
+                print("theme name", theme_name)
+                print("current_theme_file", current_theme_file)
+                print("theme", theme)
+                if current_theme_file == theme_name:
+                    if exists(theme):
+                        
+                        return theme
         return ''

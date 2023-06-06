@@ -78,7 +78,7 @@ class Section:
             if "https://mlgstorageaccount.blob.core.windows.net/docs/media/silence.mp3" != audio_note:
                 audio_notes = validate_narration(settings.tts_components, audio_note, page_id, self.name)
 
-            page = Page(page_id=page_id, marp_header=f"---\n{markdown_slides[0]}\n---\n", markdown_text=markdown_text,
+            page = Page(page_id=page_id, marp_header=markdown_slides[0], markdown_text=markdown_text,
                         audio_notes=audio_notes, settings=settings)
             page_id += 1
     
