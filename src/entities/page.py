@@ -110,7 +110,7 @@ class Page:
                 current_theme_file = f"{current_theme}.css"
                 print("current?theme", current_theme_file)
                 print("themes list", themes)
-                for theme in themes:
+                for theme in themes.split(' '):
                     theme_name = basename(theme)
                     print("theme name", theme_name)
                     if current_theme_file == theme_name:
