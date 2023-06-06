@@ -99,6 +99,7 @@ class Page:
     def get_current_theme(self, themes):
         '''Get the file of the theme
         '''
+        print("self.marp_header", self.marp_header)
         directives = self.marp_header.split("\n")
         directives = list(filter(lambda item: item != '', directives))
         print("directives", directives)
