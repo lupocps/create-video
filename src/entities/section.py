@@ -65,7 +65,6 @@ class Section:
         markdown_header = markdown_slides[0]
 
         markdown_header, current_theme_file = validate_header(markdown_header, settings.themes, self.name)
-        print("markdown_header", markdown_header)
         page_id = 1
         for page in markdown_slides[1:]:
 
@@ -75,7 +74,7 @@ class Section:
             if "https://mlgstorageaccount.blob.core.windows.net/docs/media/silence.mp3" != audio_note:
                 audio_notes = validate_narration(settings.tts_components, audio_note, page_id, self.name)
 
-            page = Page(page_id=page_id, marp_header=markdown_slides[0], markdown_text=content,
+            page = Page(page_id=page_id, marp_header=markdown_header, markdown_text=content,
                         audio_notes=audio_notes, settings=settings)
             page_id += 1
     
