@@ -52,9 +52,7 @@ class Section:
         if not exists(markdown_file):
             log(f"Check the toc file, the file {markdown_file} does not exists", "error")
 
-
         markdown_absolute_path = dirname(markdown_file).replace("\\", "/")
-
 
         # Open and Read the markdown content
         with open(markdown_file, "r", encoding="utf-8") as file:
@@ -67,8 +65,7 @@ class Section:
         markdown_header = markdown_slides[0]
 
         markdown_header, current_theme_file = validate_header(markdown_header, settings.themes, self.name)
-
-
+        print("markdown_header", markdown_header)
         page_id = 1
         for page in markdown_slides[1:]:
 

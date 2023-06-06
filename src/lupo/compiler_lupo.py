@@ -349,7 +349,7 @@ def validate_header(markdown_header: str, themes: str, section_name: str) -> lis
     directives = markdown_header.split("\n")
     # Remove '' elements
     directives = list(filter(lambda item: item != '', directives))
-    header_validated = "---\n"
+    header_validated = ""
     current_theme = ""
     if not directives[0].startswith("marp: true"):
         log(
@@ -367,8 +367,7 @@ def validate_header(markdown_header: str, themes: str, section_name: str) -> lis
             log(
                 f"The format of the header in the file {section_name} not is correct", "error")
 
-    header_validated += "---" + "\n\n"
-    return header_validated, current_theme
+    return header_validated[:-1], current_theme
 
 
 def validate_theme_file(current_theme: str, themes: str, section_name: str) -> str:
