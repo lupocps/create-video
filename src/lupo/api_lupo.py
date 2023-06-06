@@ -1,6 +1,5 @@
 '''Azure Connector'''
 
-
 import requests
 
 from src.utils import log

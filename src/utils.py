@@ -11,8 +11,6 @@ HEADERS_LUPO = {'Content-Type': 'application/json',
             'Accept-Encoding': 'gzip, deflate, br'}
 
 
-ENDPOINT_USER = "https://lupo.ai/api/ProjectRuns"
-
 
 ENDPOINT_LUPO = "http://172.171.248.83:5000/api"
 
@@ -57,6 +55,7 @@ SPEED_CONSTANTS = {
     "x-fast": 2
 }
 
+
 PITCH_CONSTANTS = {
     "x-low": 0.5,
     "low": 0.75,
@@ -74,6 +73,8 @@ MARP_DIRECTIVES = (
     "_backgroundImage:", "_backgroundPosition:", "_backgroundRepeat:",
     "_backgroundSize:", "_color:"
 )
+
+ENDPOINT_USER = "https://lupo.ai/api/ProjectRuns"
 
 
 def log(message: str, level: str = logging.INFO):
