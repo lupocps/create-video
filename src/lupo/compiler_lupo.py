@@ -203,13 +203,15 @@ def rectify_voice_speaker(voice_speaker: str) -> str:
     '''
     response = requests.get(ENDPOINT_LUPO+"/speakers",
                             HEADERS_LUPO, timeout=20)
+    print("ENDPOINT_LUPO", ENDPOINT_LUPO)
+    print("response status", response.status_code)
     if response.status_code == 200:
         speakers_lupo = response.json()
+        for language, speakers in speakers_lupo['speakers'].items():
+            if voice_speaker in speakers:
+                return f"{language}-{voice_speaker}Neural"
     else:
         log("Problem with connecting to the API ", "warning")
-    for language, speakers in speakers_lupo['speakers'].items():
-        if voice_speaker in speakers:
-            return f"{language}-{voice_speaker}Neural"
 
     log('The voice speaker does not exist', 'warning')
     # TODO: default speaker for each language
