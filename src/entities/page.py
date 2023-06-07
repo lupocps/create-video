@@ -92,65 +92,65 @@ class Page:
 
 
 
-    def generate_video(self, source, audio_notes):
-        if not "silence.mp3" in audio_notes:
-            if "mp4" in source:
-                source_type = "video"
-            else:
-                source_type = "image"
-            complete_audio_note = self.composite_audio_notes(audio_notes)
-            video = generate_video(source, source_type, complete_audio_note, not self.settings.final)
-            return video
+    # def generate_video(self, source, audio_notes):
+    #     if not "silence.mp3" in audio_notes:
+    #         if "mp4" in source:
+    #             source_type = "video"
+    #         else:
+    #             source_type = "image"
+    #         complete_audio_note = self.composite_audio_notes(audio_notes)
+    #         video = generate_video(source, source_type, complete_audio_note, not self.settings.final)
+    #         return video
 
 
 
-    def composite_audio_notes(self, audio_notes):
-        '''Extract the audio notes from an external video.
+    # def composite_audio_notes(self, audio_notes):
+    #     '''Extract the audio notes from an external video.
 
-            Parameters:
-                audio_notes(list): List of the audio notes for the external video
+    #         Parameters:
+    #             audio_notes(list): List of the audio notes for the external video
 
-            Return:
-                src
-        '''
+    #         Return:
+    #             src
+    #     '''
 
-        final_audio_clip = None
+    #     final_audio_clip = None
 
-        for audio_note in audio_notes:
-            print(audio_note.output_path)
-            temporal_audio_clip = AudioFileClip(
-                audio_note.output_path, fps=48000)
+    #     for audio_note in audio_notes:
+    #         print(audio_note.output_path)
+    #         temporal_audio_clip = AudioFileClip(
+    #             audio_note.output_path, fps=48000)
 
-            if final_audio_clip is None:
-                if audio_note.time is not None:
-                    final_audio_clip = temporal_audio_clip
-                    final_audio_clip = final_audio_clip.set_start(
-                                            (audio_note.hours, audio_note.minutes, audio_note.seconds))
-                else:
-                    final_audio_clip = temporal_audio_clip
-            else:
-                if audio_note.time is not None:
-                    final_audio_clip = CompositeAudioClip([
-                        final_audio_clip,
-                        temporal_audio_clip.set_start(
-                            (audio_note.hours, audio_note.minutes, audio_note.seconds))
-                    ])
-                else:
-                    final_audio_clip = CompositeAudioClip([
-                        final_audio_clip,
-                        temporal_audio_clip.set_start(final_audio_clip.duration)
-                    ])
+    #         if final_audio_clip is None:
+    #             if audio_note.time is not None:
+    #                 final_audio_clip = temporal_audio_clip
+    #                 final_audio_clip = final_audio_clip.set_start(
+    #                                         (audio_note.hours, audio_note.minutes, audio_note.seconds))
+    #             else:
+    #                 final_audio_clip = temporal_audio_clip
+    #         else:
+    #             if audio_note.time is not None:
+    #                 final_audio_clip = CompositeAudioClip([
+    #                     final_audio_clip,
+    #                     temporal_audio_clip.set_start(
+    #                         (audio_note.hours, audio_note.minutes, audio_note.seconds))
+    #                 ])
+    #             else:
+    #                 final_audio_clip = CompositeAudioClip([
+    #                     final_audio_clip,
+    #                     temporal_audio_clip.set_start(final_audio_clip.duration)
+    #                 ])
 
         
-        audio = f"{self.settings.course_name}_{self.page_id}.mp3"
-        current_dir = os.path.dirname(os.path.abspath(__file__))
-        file_path = os.path.join(current_dir,audio )
-        final_audio_clip.write_audiofile(file_path, codec='libmp3lame', fps=48000 )
+    #     audio = f"{self.settings.course_name}_{self.page_id}.mp3"
+    #     current_dir = os.path.dirname(os.path.abspath(__file__))
+    #     file_path = os.path.join(current_dir,audio )
+    #     final_audio_clip.write_audiofile(file_path, codec='libmp3lame', fps=48000 )
         
-        file_name = basename(file_path)
-        #final_audio_clip = upload_file_to_azure_blob_storage("courses", file_path, blob_name=f"{course_name}/assets/{file_name}")
-        os.remove(file_path)
-        return final_audio_clip
+    #     file_name = basename(file_path)
+    #     #final_audio_clip = upload_file_to_azure_blob_storage("courses", file_path, blob_name=f"{course_name}/assets/{file_name}")
+    #     os.remove(file_path)
+    #     return final_audio_clip
 
 
 
