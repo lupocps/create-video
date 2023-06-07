@@ -72,3 +72,18 @@ def generate_video(source, source_type, audio_notes, draft):
         log("Problem with connecting to the API ", "warning")
         
     return video
+
+
+def concatenate_videos(videos):
+    body = {'video_urls': videos}
+    print("body", body)
+    response = requests.post(ENDPOINT_LUPO+"/concatenate_videos", headers=HEADERS_LUPO, json=body,timeout=20)
+    if response.status_code == 200:
+        video_response = response.json()
+        time = video_response['time']
+        video = video_response['video_url']
+        print("video", video)
+    else:
+        log("Problem with connecting to the API ", "warning")
+        
+    return video, time

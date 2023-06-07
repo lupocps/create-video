@@ -6,6 +6,7 @@ import re
 from os.path import dirname
 from os.path import exists
 from src.utils import log
+from src.lupo.api_lupo import concatenate_videos
 
 from src.lupo.compiler_lupo import fix_relative_paths
 from src.lupo.compiler_lupo import validate_header
@@ -92,7 +93,15 @@ class Section:
         for page in self.pages:
           #  page.generate_path()
             audio_notes = page.generate_audio_notes(self.tts_components)
-            source = page.generate_source()
-            video = page.generate_video(audio_notes, source)
-            #video_only_file = page.generate_video()
+            #source = page.generate_source()
+           # video = page.generate_video(audio_notes, source)
+           # self.videos.append(video)
+        
+        #concatenate_video, time = self.concatenate_video_files(self.videos)
+        #self.settings.measure_timing.add_time(time)
+        #self.settings.measure_timing.add_video_amount()
+        #return concatenate_video
  
+
+    def concatenate_video_files(self, videos):
+        return concatenate_videos(videos)
