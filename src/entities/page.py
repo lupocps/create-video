@@ -9,8 +9,8 @@ from src.lupo.api_lupo import generate_image
 from src.lupo.api_lupo import generate_video
 from os.path import exists 
 from os.path import basename
-from moviepy.editor import AudioFileClip
-from moviepy.editor import CompositeAudioClip
+#from moviepy.editor import AudioFileClip
+#from moviepy.editor import CompositeAudioClip
 
 class Page:
     '''This class contains all the content and audio notes of the page
